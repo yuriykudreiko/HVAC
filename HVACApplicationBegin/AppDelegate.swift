@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navVC
         self.window?.makeKeyAndVisible()
     
+        print("Hello World")
+        
         return true
     }
 
