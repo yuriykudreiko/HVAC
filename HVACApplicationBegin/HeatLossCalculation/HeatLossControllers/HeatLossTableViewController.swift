@@ -8,16 +8,27 @@
 
 import UIKit
 
-class HeatLossTableViewController: UITableViewController {
+class HeatLossTableViewController: UITableViewController, HeatLossCalculationViewControllerDelegate {
 
-    var array = ["qwe", "asd", "zxc"]
+    // MARK: - Properties
     
+    var myVC : HeatLossCalculationViewController?
+    var heatLossArray : [HeatLossResult] = []
+    var rememberingNumberOfRow : Int?
+    
+    // MARK: - viewDidLoad
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLayerAction(sander:)))
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -27,7 +38,8 @@ class HeatLossTableViewController: UITableViewController {
     
     @objc private func addLayerAction(sander: UIBarButtonItem) {
         let vc = HeatLossCalculationViewController()
-        //vc.delegate = self
+        vc.delegate = self
+        vc.overwriteHeatLossResult = false
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true) {
             print("EngeniringViewController create")
@@ -42,54 +54,60 @@ class HeatLossTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return array.count
+        return heatLossArray.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cellIdentifier = "HeatLossCell"
-        let cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
         
-        cell.textLabel?.text = array[indexPath.row]
-
+        cell.textLabel?.text = heatLossArray[indexPath.row].calculationName
+        
+        var sum : Double = 0
+        
+        for item in heatLossArray[indexPath.row].constructionArray {
+            sum += item.heatLoss
+        }
+        cell.accessoryType = .disclosureIndicator
+        cell.detailTextLabel?.text = "\(sum)"
         return cell
     }
     
-
+    // MARK: - UITableViewDelegate
     
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
- 
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-        array.swapAt(fromIndexPath.row, to.row)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.rememberingNumberOfRow = indexPath.row
+        let vc = HeatLossCalculationViewController()
+        vc.delegate = self
+        vc.calculationResult = heatLossArray[indexPath.row]
+        vc.overwriteHeatLossResult = true
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true) {
+            print("EngeniringViewController opened")
+        }
     }
     
+    // MARK: - AddNewConstructionViewControllerDelegate
+    
+    func addHeatLossCalculationWith(result: HeatLossResult, overwrite: Bool) {
+        print("Delegate")
 
-    
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+        if overwrite {
+            print("overwrite")
+            if let index = rememberingNumberOfRow {
+                heatLossArray[index] = result
+            }
+        } else {
+            print("append")
+            heatLossArray.append(result)
+        }
     }
-    
 }
+
+
+
+
+
+

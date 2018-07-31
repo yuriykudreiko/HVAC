@@ -47,6 +47,7 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
 
             let vc = EngeniringCalculationViewController()
             vc.delegate = heatEngeniringTableViewController as? EngeniringCalculationViewControllerDelegate
+            vc.overwriteMainResult = false
             let navVC = UINavigationController(rootViewController: vc)
             present(navVC, animated: true, completion: {
                 print("EnginiringCalculationTableViewController create")
@@ -54,7 +55,8 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
         } else if self.tabBar.selectedItem?.title == "Рассчет теплопотерь" {
             
             let vc = HeatLossCalculationViewController()
-            //vc.delegate = self
+            vc.delegate = heatLossTableViewController as? HeatLossCalculationViewControllerDelegate
+            vc.overwriteHeatLossResult = false
             let navVC = UINavigationController(rootViewController: vc)
             present(navVC, animated: true) {
                 print("EngeniringViewController create")

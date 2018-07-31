@@ -8,70 +8,27 @@
 
 import UIKit
 
-protocol EngeniringCalculationViewControllerDelegate {
-    func addCalculation(result: EngeniringResult)
+extension UIColor {
+    static var mainPink = UIColor(red: 232/255, green: 68/255, blue: 133/255, alpha: 1)
+    static var turquoise = UIColor(red: 48/255, green: 214/255, blue: 200/255, alpha: 1)//(48,214,200)
+    static var aquamarine = UIColor(red: 121/255, green: 248/255, blue: 248/255, alpha: 1)//(121,248,248)
+    static var lightGreen = UIColor(red: 80/255, green: 255/255, blue: 0/255, alpha: 1)//(80,255,0)
 }
 
+protocol EngeniringCalculationViewControllerDelegate {
+    func addCalculation(result: EngeniringResult, overwrite: Bool)
+}
 
 class EngeniringCalculationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EngeniringViewControllerDelegate {
 
-    // MARK: - Properties
+    // MARK: - Static constants and functions
     
-    var delegate : EngeniringCalculationViewControllerDelegate?
-    private var name : String?
-    private var calculationArray : [Material] = []
-    private var thermalInsulationMaterial : Material?
-    var calculationResult : EngeniringResult?
+    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
     
-    // MARK: - Items
-    
-    let calculationButton : UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Рассчет", for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 10
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        button.setTitleColor(.gray, for: .normal)
-        button.addTarget(self, action: #selector(calculationAction(sender:)), for: .touchUpInside)
-        return button
-    }()
-    
-    let saveButton : UIButton = {
-        let buttom = UIButton(type: .system)
-        buttom.setTitle("Save", for: .normal)
-        buttom.backgroundColor = .blue
-        buttom.layer.cornerRadius = 10
-        buttom.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        buttom.setTitleColor(.gray, for: .normal)
-        //buttom.translatesAutoresizingMaskIntoConstraints = false
-        buttom.addTarget(self, action: #selector(saveAction(sender:)), for: .touchUpInside)
-        return buttom
-    }()
-    
-    let tableView : UITableView = {
-        let myTableView = UITableView()
-        myTableView.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
-        return myTableView
-    }()
-    
-    let normalizedWallResistanceTextField : UITextField = {
+    static private func createTextFieldWith(text: String, keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
         let sampleTextField = UITextField()
         sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = UIFont.systemFont(ofSize: 14)
-        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
-        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
-        sampleTextField.returnKeyType = UIReturnKeyType.next
-        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing
-        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
-        return sampleTextField
-    }()
-    
-    let kindOfMaterialTextField : UITextField = {
-        let sampleTextField = UITextField()
-        sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = UIFont.systemFont(ofSize: 14)
+        sampleTextField.font = myFont
         sampleTextField.borderStyle = UITextBorderStyle.roundedRect
         sampleTextField.autocorrectionType = UITextAutocorrectionType.no
         sampleTextField.keyboardType = UIKeyboardType.default
@@ -80,60 +37,95 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
         return sampleTextField
+    }
+    
+    static private func createLabelWith(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = myFont
+        return label
+    }
+    
+    static private func createButton(text: String, color: UIColor) -> UIButton {
+        let buttom = UIButton(type: .system)
+        buttom.setTitle(text, for: .normal)
+        buttom.backgroundColor = color
+        buttom.layer.cornerRadius = 10
+        buttom.titleLabel?.font = myFont
+        buttom.setTitleColor(.gray, for: .normal)
+        return buttom
+    }
+    
+    // MARK: - Properties
+    
+    var delegate : EngeniringCalculationViewControllerDelegate?
+    private var name : String?
+    private var calculationArray : [Material] = []
+    private var thermalInsulationMaterial : Material?
+    var calculationResult : EngeniringResult?
+    var numberOfElement : Int?
+    var overwriteMainResult : Bool?
+    
+    
+    // MARK: - Items
+    
+    let calculationButton : UIButton = {
+        let button = createButton(text: "Рассчет", color: .turquoise)
+        button.addTarget(self, action: #selector(calculationAction(sender:)), for: .touchUpInside)
+        return button
+    }()
+    
+    let saveButton : UIButton = {
+        let buttom = createButton(text: "Сохранить", color: .lightGreen)
+        buttom.addTarget(self, action: #selector(saveAction(sender:)), for: .touchUpInside)
+        return buttom
+    }()
+    
+    let tableView : UITableView = {
+        let myTableView = UITableView()
+        myTableView.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
+        myTableView.translatesAutoresizingMaskIntoConstraints = false
+        return myTableView
+    }()
+    
+    let normalizedWallResistanceTextField : UITextField = {
+        let sampleTextField = createTextFieldWith(text: "3.2", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        return sampleTextField
+    }()
+    
+    let kindOfMaterialTextField : UITextField = {
+        let sampleTextField = createTextFieldWith(text: "", keyboardType: .default, returnKey: .next)
+        return sampleTextField
     }()
     
     let widthTextField : UITextField = {
-        let sampleTextField =  UITextField()
-        sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = UIFont.systemFont(ofSize: 14)
-        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
-        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
-        sampleTextField.returnKeyType = UIReturnKeyType.next
-        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
-        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        let sampleTextField = createTextFieldWith(text: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        sampleTextField.isEnabled = false
         return sampleTextField
     }()
     
     let thermalConductivityTextField : UITextField = {
-        let sampleTextField = UITextField()
-        sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = .systemFont(ofSize: 14)
-        sampleTextField.borderStyle = .roundedRect
-        sampleTextField.autocorrectionType = .no
-        sampleTextField.keyboardType = .numbersAndPunctuation
-        sampleTextField.returnKeyType = .done
-        sampleTextField.clearButtonMode = .whileEditing
-        sampleTextField.contentVerticalAlignment = .center
-        sampleTextField.contentHorizontalAlignment = .center
+        let sampleTextField = createTextFieldWith(text: "", keyboardType: .numbersAndPunctuation, returnKey: .done)
         return sampleTextField
     }()
     
     let normalizedWallResistanceLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Норм. сопротивление, R"
-        label.font = UIFont.systemFont(ofSize: 14)
+        let label = createLabelWith(text: "Норм. сопротивление, R")
         return label
     }()
     
     let kindOfMaterialLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Материал"
-        label.font = UIFont.systemFont(ofSize: 14)
+        let label = createLabelWith(text: "Материал")
         return label
     }()
     
     let widthLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Рассчетная толщина, δ м"
-        label.font = UIFont.systemFont(ofSize: 14)
+        let label = createLabelWith(text: "Рассчетная толщина, δ м")
         return label
     }()
     
     let thermalConductivityLablel : UILabel = {
-        let label = UILabel()
-        label.text = "Теплопроводность, λ"
-        label.font = UIFont.systemFont(ofSize: 14)
+        let label = createLabelWith(text: "Теплопроводность, λ")
         return label
     }()
     
@@ -145,54 +137,45 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         calculationArray = calculationResult?.materialArray ?? []
         
         self.view.backgroundColor = .white
-        self.createAlert()
+        if overwriteMainResult == false {
+            self.createCalculationNameAlert()
+        }
         
         self.navigationItem.title = "Теплоизоляция"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonAction(sender:)))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLayerAction(sander:)))
         
-        normalizedWallResistanceTextField.frame = CGRect(x: view.bounds.width - 150 - 20, y: 100, width: 150, height: 40)
+        if let calculation = calculationResult?.nameOfCalculation {
+            self.name = calculation
+        }
+        
         if let norm = calculationResult?.normalizedWallResistance {
             normalizedWallResistanceTextField.text = String(norm)
+        } else {
+            normalizedWallResistanceTextField.text = "3.2"
         }
         
-        kindOfMaterialTextField.frame = CGRect(x: view.bounds.width - 150 - 20, y: 150, width: 150, height: 40)
         if let kind = calculationResult?.insulationMaterial.name {
             kindOfMaterialTextField.text = kind
+        } else {
+            kindOfMaterialTextField.text = ""
         }
         
-        thermalConductivityTextField.frame = CGRect(x: view.bounds.width - 150 - 20, y: 200, width: 150, height: 40)
         if let thermal = calculationResult?.insulationMaterial.thermalConductivity {
             thermalConductivityTextField.text = String(thermal)
+        } else {
+            thermalConductivityTextField.text = ""
         }
         
-        widthTextField.frame = CGRect(x: view.bounds.width - 150 - 20, y: 250, width: 150, height: 40)
         if let width = calculationResult?.insulationMaterial.width {
-            widthTextField.text = String(width)
+            let insulationWidth = Double(round(1000 * width)/1000)
+            widthTextField.text = String(insulationWidth)
         }
-        
-        self.view.addSubview(normalizedWallResistanceTextField)
-        self.view.addSubview(kindOfMaterialTextField)
-        self.view.addSubview(widthTextField)
-        self.view.addSubview(thermalConductivityTextField)
-        
-        normalizedWallResistanceLabel.frame = CGRect(x: 20, y: 100, width: 200, height: 40)
-        kindOfMaterialLabel.frame =         CGRect(x: 20, y: 150, width: 200, height: 40)
-        thermalConductivityLablel.frame =   CGRect(x: 20, y: 200, width: 200, height: 40)
-        widthLabel.frame =                  CGRect(x: 20, y: 250, width: 200, height: 40)
-        
-        self.view.addSubview(normalizedWallResistanceLabel)
-        self.view.addSubview(kindOfMaterialLabel)
-        self.view.addSubview(widthLabel)
-        self.view.addSubview(thermalConductivityLablel)
-        
-        tableView.frame = CGRect(x: 0, y: 300, width: self.view.bounds.width, height: self.view.bounds.height - 400)
+    
         tableView.delegate = self
         tableView.dataSource = self
-        self.view.addSubview(tableView)
         
-        saveButton.frame = CGRect(x: self.view.bounds.width/2 - 50, y: self.view.bounds.height - 90, width: 100, height: 50)
-        self.view.addSubview(saveButton)
+        layoutSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -203,36 +186,90 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
+    // MARK: - Layout
+    
+    private func createStackViewWith(subviews: [UIView]) -> UIStackView {
+        
+        let line = UIStackView(arrangedSubviews: subviews)
+        line.distribution = .fillEqually
+        line.spacing = 10
+        return line
+    }
+    
+    private func createStackLine() -> [UIStackView] {
+        
+        let firstLine   = createStackViewWith(subviews: [normalizedWallResistanceLabel, normalizedWallResistanceTextField])
+        let secondLine  = createStackViewWith(subviews: [kindOfMaterialLabel, kindOfMaterialTextField])
+        let thirdLine   = createStackViewWith(subviews: [thermalConductivityLablel, thermalConductivityTextField])
+        let fourth      = createStackViewWith(subviews: [widthLabel, widthTextField])
+        
+        return [firstLine, secondLine, thirdLine, fourth]
+    }
+    
+    private func layoutSetup() {
+        
+        let textFieldAndLabelStackView = UIStackView(arrangedSubviews: createStackLine())
+        view.addSubview(textFieldAndLabelStackView)
+        textFieldAndLabelStackView.axis = .vertical
+        textFieldAndLabelStackView.spacing = 10
+        textFieldAndLabelStackView.distribution = .fillEqually
+        textFieldAndLabelStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            textFieldAndLabelStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            textFieldAndLabelStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            textFieldAndLabelStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            textFieldAndLabelStackView.heightAnchor.constraint(equalToConstant: 200)
+            ])
+        
+        let buttonStackView = createStackViewWith(subviews: [saveButton, calculationButton])
+        view.addSubview(buttonStackView)
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            buttonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            buttonStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            buttonStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            buttonStackView.heightAnchor.constraint(equalToConstant: 50)
+            ])
+        
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: textFieldAndLabelStackView.bottomAnchor, constant: 10),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -10)
+            ])
+    }
+    
     // MARK: - Actions
     
     @objc private func calculationAction(sender: UIButton) {
         
-        var sum = 1/8.7 + 1/23
+        let calculationName = self.name!
+        let materialName = self.kindOfMaterialTextField.text!
+        let thermalConductivity = Double(self.thermalConductivityTextField.text!)
+        let normalizedWallResistance = Double(self.normalizedWallResistanceTextField.text!)
         
-        for layer in calculationArray {
-            sum += (layer.width / layer.thermalConductivity)
+        if materialName != "" && thermalConductivity != nil && normalizedWallResistance != nil {
+            self.calculationResult = EngeniringResult(calculationName: calculationName, thermalInsulationName: materialName, normalizedWallResistance: normalizedWallResistance!, materialArray: self.calculationArray, thermalInsulationConductivity: thermalConductivity!)
+            
+            let insulationWidth = Double(round(1000 * (self.calculationResult?.insulationMaterial.width)!)/1000)
+            
+            widthTextField.text = "\(insulationWidth)"
+        } else {
+            createCalculationAlert()
         }
-        let R = Double(normalizedWallResistanceTextField.text!) ?? 3.2
-        let λ = Double(thermalConductivityTextField.text!)!
-        
-        let insulationWidth = (R - sum) * λ
-        
-        let x = insulationWidth
-        let y = Double(round(1000*x)/1000)
-        
-        widthTextField.text = "\(y)"
-        
-        thermalInsulationMaterial = Material(name: self.kindOfMaterialTextField.text!, width: insulationWidth, thermalConductivity: Double(self.thermalConductivityTextField.text!)!)
-        self.calculationResult = EngeniringResult(nameOfCalculation: self.name!, normalizedWallResistance: Double(self.normalizedWallResistanceTextField.text!)!, materialArray: self.calculationArray, insulationMaterial: thermalInsulationMaterial!)
     }
     
     @objc private func saveAction(sender: UIButton) {
         
-        self.delegate?.addCalculation(result: self.calculationResult!)
-        
-        dismiss(animated: true) {
-            print(self.calculationResult!)
+        if let result = self.calculationResult {
+            self.delegate?.addCalculation(result: result, overwrite: overwriteMainResult!)
+            dismiss(animated: true) {
+                print(self.calculationResult!)
+            }
+        } else {
+            createSaveAlert()
         }
     }
     
@@ -245,15 +282,16 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     @objc private func addLayerAction(sander: UIBarButtonItem) {
         let vc = EngeniringViewController()
         vc.delegate = self
+        vc.needToOverwrite = false
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true) {
             print("EngeniringViewController create")
         }
     }
     
-    // MARK: - Help methods
+    // MARK: - Alerts
     
-    private func createAlert() {
+    private func createCalculationNameAlert() {
         
         let alertVC = UIAlertController(title: "Введите имя рассчета", message: nil, preferredStyle: .alert)
         alertVC.addTextField(configurationHandler: { (textField) in
@@ -264,9 +302,27 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
             self.name = textField.text!
         })
         alertVC.addAction(submitAction)
-        
         present(alertVC, animated: true) {
-            
+        }
+    }
+    
+    private func createCalculationAlert() {
+        
+        let alertVC = UIAlertController(title: "Заполните все поля", message: nil, preferredStyle: .alert)
+
+        let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(submitAction)
+        present(alertVC, animated: true) {
+        }
+    }
+    
+    private func createSaveAlert() {
+        
+        let alertVC = UIAlertController(title: "Нажмите кнопку <<Рассчет>>", message: nil, preferredStyle: .alert)
+        
+        let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(submitAction)
+        present(alertVC, animated: true) {
         }
     }
     
@@ -278,6 +334,14 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return calculationArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Состав ограждающей конструкции:"
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return "Слоев: \(calculationArray.count)"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -292,30 +356,26 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     
     // MARK: - UITableViewDelegate
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 50
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 50))
-        footerView.backgroundColor = UIColor(red: 73, green: 154, blue: 245, alpha: 1)
-        calculationButton.frame = CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 50)
-        footerView.addSubview(calculationButton)
-        return footerView
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        self.numberOfElement = indexPath.row
         let vc = EngeniringViewController()
+        vc.delegate = self
         vc.material = calculationArray[indexPath.row]
-        present(vc, animated: true) {
+        vc.needToOverwrite = true
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true) {
             print("EngeniringViewController opened")
         }
     }
     
     // MARK: - EngeniringViewControllerDelegate
     
-    func addLayerInformation(layer: Material) {
-        self.calculationArray.append(layer)
+    func addLayerInformation(layer: Material, overwrite: Bool) {
+        if overwrite == true {
+            self.calculationArray[numberOfElement!] = layer
+        } else {
+            self.calculationArray.append(layer)
+        }
     }
 }

@@ -14,7 +14,8 @@ class HeatEngeniringTableViewController: UITableViewController, EngeniringCalcul
     
     var myVC : EngeniringCalculationViewController?
     var engeniringArray : [EngeniringResult] = []
-
+    var rememberingNumberOfRow : Int?
+    
     // MARK: - viewDidLoad
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,9 +46,11 @@ class HeatEngeniringTableViewController: UITableViewController, EngeniringCalcul
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "heatEngeniringCell"
-        let cell = UITableViewCell(style: .default, reuseIdentifier: cellIdentifier)
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
         let result = self.engeniringArray[indexPath.row]
         cell.textLabel?.text = result.nameOfCalculation
+        let insulationWidth = Double(round(1000 * result.insulationMaterial.width)/1000)
+        cell.detailTextLabel?.text = "\(insulationWidth)"
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -57,15 +60,23 @@ class HeatEngeniringTableViewController: UITableViewController, EngeniringCalcul
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
+        rememberingNumberOfRow = indexPath.row
         myVC?.calculationResult = engeniringArray[indexPath.row]
-        present(myVC!, animated: true) {
+        myVC?.overwriteMainResult = true
+        myVC?.delegate = self
+        let navVC = UINavigationController(rootViewController: myVC!)
+        present(navVC, animated: true) {
             print("EngeniringViewController opened")
         }
     }
     
     //MARK: - EngeniringCalculationViewControllerDelegate
     
-    func addCalculation(result: EngeniringResult) {
-        engeniringArray.append(result)
+    func addCalculation(result: EngeniringResult, overwrite: Bool) {
+        if overwrite {
+            engeniringArray[rememberingNumberOfRow!] = result
+        } else {
+            engeniringArray.append(result)
+        }
     }
 }

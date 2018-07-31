@@ -26,51 +26,19 @@ import UIKit
 //var heatLoss : Double
 
 protocol AddNewConstructionViewControllerDelegate {
-    func addNewConstructionWith(name: String, orientation: String, square: Double)
+    func addNewConstructionWith(name: String, orientation: String, square: Double, overwrite: Bool)
 }
 
 class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    // MARK: - Properties
+    // MARK: - Static constants and functions
     
-    var delegate : AddNewConstructionViewControllerDelegate?
-    var currentConstruction : Construction?
-    private var orientationAndNameArray = [["св", "с", "сз", "з", "юз", "ю", "юв", "в"], ["Стена", "Окно", "Дверь", "Пол", "Покрытие"]]
-    private var orientation : String?
-    private var constructionName : String?
-    private var square : Double?
+    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
     
-    // MARK: - Items
-    
-    private let orientationAndNamePickerView : UIPickerView = {
-        let typePickerView = UIPickerView()
-        typePickerView.backgroundColor = .white
-        return typePickerView
-    }()
-    
-    private let nameLabel : UILabel = {
-        
-        let label = UILabel()
-        label.text = "Наименование"
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
-    
-    private let orientationLabel : UILabel = {
-        
-        let label = UILabel()
-        label.text = "Ориентация"
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
-    
-    private let squareTextField : UITextField = {
-        
+    static private func createTextFieldWith(keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
         let sampleTextField = UITextField()
         sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = UIFont.systemFont(ofSize: 14)
+        sampleTextField.font = myFont
         sampleTextField.borderStyle = UITextBorderStyle.roundedRect
         sampleTextField.autocorrectionType = UITextAutocorrectionType.no
         sampleTextField.keyboardType = UIKeyboardType.default
@@ -79,40 +47,52 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
         sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
         return sampleTextField
+    }
+    
+    static private func createLabelWith(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textAlignment = .center
+        label.font = myFont
+        return label
+    }
+    
+    // MARK: - Properties
+    
+    var delegate : AddNewConstructionViewControllerDelegate?
+    var currentConstruction : Construction?
+    var overwrite : Bool = false
+    
+    private var orientationAndNameArray = [["св", "с", "сз", "з", "юз", "ю", "юв", "в"], ["Стена", "Окно", "Дверь", "Пол", "Покрытие"]]
+    
+    // MARK: - Items
+    
+    private let orientationAndNamePickerView : UIPickerView = {
+        let typePickerView = UIPickerView()
+        typePickerView.backgroundColor = .white
+        typePickerView.translatesAutoresizingMaskIntoConstraints = false
+        return typePickerView
     }()
     
-    private let squareLabel : UILabel = {
-        
-        let label = UILabel()
-        label.text = "Площадь, м²"
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
+    private let nameLabel : UILabel = {
+        let label = createLabelWith(text: "Наименование")
         return label
     }()
     
-    private let heatResistanceTextField : UITextField = {
-        
-        let sampleTextField =  UITextField()
-        sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = UIFont.systemFont(ofSize: 14)
-        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
-        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.numbersAndPunctuation
-        sampleTextField.returnKeyType = UIReturnKeyType.next
-        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing;
-        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+    private let orientationLabel : UILabel = {
+        let label = createLabelWith(text: "Ориентация")
+        return label
+    }()
+    
+    private let squareTextField : UITextField = {
+        let sampleTextField = createTextFieldWith(keyboardType: .default, returnKey: .done)
         return sampleTextField
     }()
     
-    private let heatResistanceLabel : UILabel = {
-        
-        let label = UILabel()
-        label.text = "Термическое сопротивление, Rт"
-        label.font = UIFont.systemFont(ofSize: 14)
+    private let squareLabel : UILabel = {
+        let label = createLabelWith(text: "Площадь, м²")
         return label
     }()
-    
-
     
     private let saveButton : UIButton = {
         let buttom = UIButton(type: .system)
@@ -121,7 +101,7 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
         buttom.layer.cornerRadius = 10
         buttom.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         buttom.setTitleColor(.gray, for: .normal)
-        //buttom.translatesAutoresizingMaskIntoConstraints = false
+        buttom.translatesAutoresizingMaskIntoConstraints = false
         buttom.addTarget(self, action: #selector(saveAction), for: .touchUpInside)
         return buttom
     }()
@@ -130,47 +110,108 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        
-        squareTextField.frame = CGRect(x: view.bounds.width - 130 - 20, y: 230, width: 130, height: 40)
-//        if let square = currentConstruction?.square {
-//            squareTextField.text = String(square)
-//        }
-//
-//        heatResistanceTextField.frame = CGRect(x: view.bounds.width - 130 - 20, y: 150, width: 130, height: 40)
-//        if let heatRes = currentConstruction?.heatResistance {
-//            heatResistanceTextField.text = String(heatRes)
-//        }
-        orientationAndNamePickerView.frame = CGRect(x: 10, y: 140, width: self.view.bounds.width - 20, height: 80)
+
+        if let square = currentConstruction?.square {
+            squareTextField.text = String(square)
+        } else {
+            squareTextField.text = ""
+        }
+
         orientationAndNamePickerView.dataSource = self
         orientationAndNamePickerView.delegate = self
-
-//        self.view.addSubview(heatResistanceTextField)
-        self.view.addSubview(orientationAndNamePickerView)
-        self.view.addSubview(squareTextField)
-
-        orientationLabel.frame    = CGRect(x: 10, y: 100, width: self.view.bounds.width/2 - 20, height: 40)
-        nameLabel.frame = CGRect(x: view.bounds.width/2 + 10, y: 100, width: self.view.bounds.width/2 - 20, height: 40)
-        squareLabel.frame         = CGRect(x: 10, y: 230, width: self.view.bounds.width/2 - 20, height: 40)
-//        heatResistanceLabel.frame = CGRect(x: 10, y: 150, width: 210, height: 40)
-
-        self.view.addSubview(squareLabel)
-//        self.view.addSubview(heatResistanceLabel)
-        self.view.addSubview(orientationLabel)
-        self.view.addSubview(nameLabel)
-        
-        saveButton.frame = CGRect(x: view.bounds.width/2 - 50, y: view.bounds.height - 100, width: 100, height: 50)
-        self.view.addSubview(saveButton)
-        
+        layoutSetup()
         self.view.backgroundColor = .white
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonAction(sender:)))
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let orientation = currentConstruction?.orientation {
+            if let index = orientationAndNameArray[0].index(of: orientation) {
+                orientationAndNamePickerView.selectRow(index, inComponent: 0, animated: true)
+                orientationAndNamePickerView.reloadAllComponents()
+                print("Индекс ориентации = \(index)")
+            } else {
+                print("не нашел")
+            }
+        }
+        
+        if let constructionName = currentConstruction?.name {
+            if let index = orientationAndNameArray[1].index(of: constructionName) {
+                orientationAndNamePickerView.selectRow(index, inComponent: 1, animated: true)
+                orientationAndNamePickerView.reloadAllComponents()
+                print("Индекс конструкции = \(index)")
+            } else {
+                print("не нашел")
+            }
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: - Layout
+    
+    private func createStackViewWith(subviews: [UIView]) -> UIStackView {
+        
+        let line = UIStackView(arrangedSubviews: subviews)
+        line.distribution = .fillEqually
+        line.spacing = 10
+        return line
+    }
+    
+    private func createStackLine() -> [UIStackView] {
+        
+        let firstLine = createStackViewWith(subviews: [squareLabel, squareTextField])
+        let secondLine = createStackViewWith(subviews: [nameLabel, orientationLabel])
+        return [firstLine, secondLine]
+    }
+    
+    private func layoutSetup() {
+        
+        let myStackView = UIStackView(arrangedSubviews: createStackLine())
+        view.addSubview(myStackView)
+        myStackView.axis = .vertical
+        myStackView.spacing = 10
+        myStackView.distribution = .fillEqually
+        myStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            myStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            myStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            myStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            myStackView.heightAnchor.constraint(equalToConstant: 100)
+            ])
+        
+        view.addSubview(saveButton)
+        NSLayoutConstraint.activate([
+            saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            saveButton.widthAnchor.constraint(equalToConstant: 150),
+            saveButton.heightAnchor.constraint(equalToConstant: 50)
+            ])
+        
+        view.addSubview(orientationAndNamePickerView)
+        NSLayoutConstraint.activate([
+            orientationAndNamePickerView.topAnchor.constraint(equalTo: myStackView.bottomAnchor, constant: 10),
+            orientationAndNamePickerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            orientationAndNamePickerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            orientationAndNamePickerView.heightAnchor.constraint(equalToConstant: 80)
+            ])
+    }
+    
+    // MARK: - Alert
+    
+    private func createSaveAlert() {
+        
+        let alertVC = UIAlertController(title: "Заполните все поля!!!", message: nil, preferredStyle: .alert)
+        let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(submitAction)
+        present(alertVC, animated: true) {
+        }
     }
     
     // MARK: - Actions
@@ -179,14 +220,6 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
         
         dismiss(animated: true) {
             print("AddNewConstructionViewController dismiss")
-            let row1 = self.orientationAndNamePickerView.selectedRow(inComponent: 0)
-            let row2 = self.orientationAndNamePickerView.selectedRow(inComponent: 1)
-            self.orientation = self.orientationAndNameArray[0][row1]
-            self.constructionName = self.orientationAndNameArray[1][row2]
-            
-            print(self.orientation!)
-            print(self.constructionName!)
-
         }
     }
     
@@ -194,17 +227,20 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
         
         let row1 = self.orientationAndNamePickerView.selectedRow(inComponent: 0)
         let row2 = self.orientationAndNamePickerView.selectedRow(inComponent: 1)
-        self.orientation = self.orientationAndNameArray[0][row1]
-        self.constructionName = self.orientationAndNameArray[1][row2]
-        self.square = Double(squareTextField.text!)!
-        print("\(self.square!)")
-        print("\(self.orientation!)")
-        print("\(self.constructionName!)")
         
-        self.delegate?.addNewConstructionWith(name: self.constructionName!, orientation: self.orientation!, square: self.square!)
-        
-        dismiss(animated: true) {
-            print("AddNewConstructionViewController save and dismiss")
+        let orientation = self.orientationAndNameArray[0][row1]
+        let constructionName = self.orientationAndNameArray[1][row2]
+
+        if let square = Double(squareTextField.text!) {
+            print("\(square)")
+            print("\(orientation)")
+            print("\(constructionName)")
+            self.delegate?.addNewConstructionWith(name: constructionName, orientation: orientation, square: square, overwrite: overwrite)
+            dismiss(animated: true) {
+                print("AddNewConstructionViewController save and dismiss")
+            }
+        } else {
+            createSaveAlert()
         }
     }
     
@@ -225,12 +261,10 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 0 {
-            self.orientation = orientationAndNameArray[component][row]
-        } else {
-            self.constructionName = orientationAndNameArray[component][row]
-        }
-        
+//        if component == 0 {
+//            self.orientation = orientationAndNameArray[component][row]
+//        } else {
+//            self.constructionName = orientationAndNameArray[component][row]
+//        }
     }
-
 }

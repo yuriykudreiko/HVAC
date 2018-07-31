@@ -19,6 +19,7 @@ import Foundation
 
 class HeatLossResult {
     
+    var calculationName : String = "Новый рассчет"
     var constructionArray : [Construction] = []
     var indoorTemperature : Double
     var outdoorTemperature : Double
@@ -26,7 +27,6 @@ class HeatLossResult {
     var windowResistance : Double
     var ceilingResistance : Double
     var flourResistance : Double
-    
     
     private func additionalHeatLoss(orientation: String) -> Double {
 
@@ -54,16 +54,23 @@ class HeatLossResult {
         
         let additionalHeaLoss = self.additionalHeatLoss(orientation: orientation)
         let constructionResistance = self.constructionResistance(name: name)
-        
         let heatLoss = square * additionalHeaLoss * (self.indoorTemperature - self.outdoorTemperature) / constructionResistance
         
         //Q = A(tp − text)(1 + ∑β)n/Rт,
         
         let construction = Construction(name: name, square: square, orientation: orientation, heatLoss: heatLoss)
-        
         return construction
     }
     
+    func calculateAllConstructionAfterChange() {
+        var newArray = [Construction]()
+        
+        for item in constructionArray {
+            let newConstruction = calculateConstructionWith(name: item.name, square: item.square, orientation: item.orientation)
+            newArray.append(newConstruction)
+        }
+        self.constructionArray = newArray
+    }
     
     init(indoorTemperature : Double, outdoorTemperature : Double, wallResistance : Double, windowResistance : Double, ceilingResistance : Double, flourResistance : Double) {
         

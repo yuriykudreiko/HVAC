@@ -21,10 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navVC = UINavigationController(rootViewController: tabBar)
         self.window?.rootViewController = navVC
         self.window?.makeKeyAndVisible()
-    
-        print("Hello World")
-        print("New Change")
         
+
         return true
     }
 
