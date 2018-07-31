@@ -50,7 +50,7 @@ class HeatEngeniringTableViewController: UITableViewController, EngeniringCalcul
         let result = self.engeniringArray[indexPath.row]
         cell.textLabel?.text = result.nameOfCalculation
         let insulationWidth = Double(round(1000 * result.insulationMaterial.width)/1000)
-        cell.detailTextLabel?.text = "\(insulationWidth)"
+        cell.detailTextLabel?.text = "\(insulationWidth) мм"
         cell.accessoryType = .disclosureIndicator
         return cell
     }

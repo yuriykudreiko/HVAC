@@ -348,7 +348,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     }
     
     private func createSaveAlert() {
-        let alertVC = UIAlertController(title: "Что-то не так", message: nil, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Заполните правильно все поля в текущем окне(числами)", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
         present(alertVC, animated: true) {

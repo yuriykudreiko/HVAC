@@ -201,7 +201,7 @@ class EngeniringViewController: UIViewController {
     
     private func createAlert() {
         
-        let alertVC = UIAlertController(title: "Заполните все поля!!!", message: nil, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Правильно заполните все поля в отекущем окне", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
         present(alertVC, animated: true) {

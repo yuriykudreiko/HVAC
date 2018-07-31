@@ -70,7 +70,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
             sum += item.heatLoss
         }
         cell.accessoryType = .disclosureIndicator
-        cell.detailTextLabel?.text = "\(sum)"
+        cell.detailTextLabel?.text = "\(sum) Вт"
         return cell
     }
     

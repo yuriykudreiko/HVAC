@@ -110,7 +110,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     }()
     
     let normalizedWallResistanceLabel : UILabel = {
-        let label = createLabelWith(text: "Норм. сопротивление, R")
+        let label = createLabelWith(text: "Rнорм, м²·°C/Вт")
         return label
     }()
     
@@ -308,7 +308,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     
     private func createCalculationAlert() {
         
-        let alertVC = UIAlertController(title: "Заполните все поля", message: nil, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Заполните все поля в текущем окне", message: nil, preferredStyle: .alert)
 
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)

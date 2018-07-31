@@ -166,7 +166,7 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
     private func createStackLine() -> [UIStackView] {
         
         let firstLine = createStackViewWith(subviews: [squareLabel, squareTextField])
-        let secondLine = createStackViewWith(subviews: [nameLabel, orientationLabel])
+        let secondLine = createStackViewWith(subviews: [orientationLabel, nameLabel])
         return [firstLine, secondLine]
     }
     
@@ -207,7 +207,7 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
     
     private func createSaveAlert() {
         
-        let alertVC = UIAlertController(title: "Заполните все поля!!!", message: nil, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Введите корректное значение(число) в поле <<Площадь>>", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
         present(alertVC, animated: true) {
