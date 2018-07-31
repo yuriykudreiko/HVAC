@@ -70,9 +70,7 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         if  item.title == "Теплотехнический рассчет" {
             self.navigationItem.title = "Теплотехнический рассчет"
-            print("1")
         } else if item.title == "Рассчет теплопотерь" {
-            print("2")
             self.navigationItem.title = "Рассчет теплопотерь"
         }
     }
