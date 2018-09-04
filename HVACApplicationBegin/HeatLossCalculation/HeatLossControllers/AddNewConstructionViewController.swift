@@ -149,10 +149,6 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     // MARK: - Layout
     
     private func createStackViewWith(subviews: [UIView]) -> UIStackView {
@@ -258,13 +254,5 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return orientationAndNameArray[component][row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        if component == 0 {
-//            self.orientation = orientationAndNameArray[component][row]
-//        } else {
-//            self.constructionName = orientationAndNameArray[component][row]
-//        }
     }
 }

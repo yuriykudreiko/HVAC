@@ -203,11 +203,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     // MARK: - Layout
     
     private func createStackViewWith(subviews: [UIView]) -> UIStackView {
