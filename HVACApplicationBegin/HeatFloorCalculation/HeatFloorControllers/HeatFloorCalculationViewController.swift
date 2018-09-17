@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HeatFloorCalculationViewControllerDelegate {
-    func addHeatFloorCalculationWith(square: Double, pipeManufacturer: String, floorConstruction: String, waterTemperature: String, distanceBetweenPipes: Double, indoorTemperature: Double)
+    func addHeatFloorCalculationWith(square: Double, heatLoss: Double, pipeManufacturer: String, floorConstruction: String, waterTemperature: Double, distanceBetweenPipes: Double, indoorTemperature: Double)
 }
 
 class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -36,6 +36,7 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
         let typePickerView = UIPickerView()
         typePickerView.backgroundColor = .lightGray
         typePickerView.layer.cornerRadius = 8
+        
         typePickerView.translatesAutoresizingMaskIntoConstraints = false
         return typePickerView
     }
@@ -56,8 +57,8 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     // MARK: - Properties
     
     var delegate : HeatFloorCalculationViewControllerDelegate?
-    private let pipeManufacturerArray = ["Kan", "Herz", "Rehay"]
-    private let floorConstructionArray = ["Ламинат", "Плитка", "Паркет", "Ковер"]
+    private let pipeManufacturerArray = ["Kan", "Herz", "Rehau"]
+    private let floorConstructionArray = ["Плитка", "Мрамор", "Ковер", "Паркет", "Ламинат"]
     private let waterTemperatureArray = ["55", "50", "45", "40"]
     private let distanceBetweenPipesArray = ["0.10", "0.15", "0.20", "0.25", "0.30", "0.35"]
     private let indoorTemperatureArray = ["15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
@@ -95,10 +96,21 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
         return sampleTextField
     }()
     
+    private let heatLossTextField : UITextField = {
+        let sampleTextField = createTextFieldWith(keyboardType: .default, returnKey: .done)
+        return sampleTextField
+    }()
+    
     private let squareLabel : UILabel = {
         let label = createLabelWith(text: "Площадь, м²")
         return label
     }()
+    
+    private let heatLossLabel : UILabel = {
+        let label = createLabelWith(text: "Теплопотери, Вт")
+        return label
+    }()
+    
     private let pipeManufacturerLabel : UILabel = {
         let label = createLabelWith(text: "Производитель труб")
         return label
@@ -127,7 +139,6 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     private let calculateButton : UIButton = {
         let buttom = UIButton(type: .system)
         buttom.setTitle("Расчет>", for: .normal)
-//        buttom.titleLabel?.font = myFont
         buttom.backgroundColor = .blue
         buttom.layer.cornerRadius = 8
         buttom.titleLabel?.font = myFont
@@ -178,13 +189,14 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     private func createStackLine() -> [UIView] {
         
         let firstLine = createStackViewWith(subviews: [squareLabel, squareTextField])
-        let secondLine = createStackViewWith(subviews: [pipeManufacturerLabel, pipeManufacturerPickerView])
-        let thirdLine = createStackViewWith(subviews: [floorConstructionLabel, floorConstructionPickerView])
-        let fourthLine = createStackViewWith(subviews: [temperatureLabel, temperaturePickerView])
-        let fifthLine = createStackViewWith(subviews: [distanceBetweenPipesLabel, distanceBetweenPipesPickerView])
-        let sixthLine = createStackViewWith(subviews: [indoorTemperatureLabel, indoorTemperaturePickerView])
+        let secondLine = createStackViewWith(subviews: [heatLossLabel, heatLossTextField])
+        let thirdLine = createStackViewWith(subviews: [pipeManufacturerLabel, pipeManufacturerPickerView])
+        let fourthLine = createStackViewWith(subviews: [floorConstructionLabel, floorConstructionPickerView])
+        let fifthLine = createStackViewWith(subviews: [temperatureLabel, temperaturePickerView])
+        let sixthLine = createStackViewWith(subviews: [distanceBetweenPipesLabel, distanceBetweenPipesPickerView])
+        let seventhLine = createStackViewWith(subviews: [indoorTemperatureLabel, indoorTemperaturePickerView])
 
-        return [firstLine, secondLine, thirdLine, fourthLine, fifthLine, sixthLine, calculateButton]
+        return [firstLine, secondLine, thirdLine, fourthLine, fifthLine, sixthLine, seventhLine, calculateButton]
     }
     
     private func layoutSetup() {
@@ -207,7 +219,7 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 500)
+            stackView.heightAnchor.constraint(equalToConstant: 600)
             ]
         )
     }
@@ -216,10 +228,10 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     
     private func createCalculationAlert() {
         
-        let alertVC = UIAlertController(title: "Введите корректное значение(число) в поле <<Площадь>>", message: nil, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Заполните правильно все поля в текущем окне", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
+            present(alertVC, animated: true) {
         }
     }
     
@@ -228,17 +240,19 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     @objc private func calculateAction(sender: UIButton) {
         let pipeManufacturer = pipeManufacturerArray[self.pipeManufacturerPickerView.selectedRow(inComponent: 0)]
         let floorConstruction = floorConstructionArray[self.floorConstructionPickerView.selectedRow(inComponent: 0)]
-        let waterTemperature = waterTemperatureArray[self.temperaturePickerView.selectedRow(inComponent: 0)]
+        let waterTemperature = Double(waterTemperatureArray[self.temperaturePickerView.selectedRow(inComponent: 0)])!
+        
         let distanceBetweenPipes = Double(distanceBetweenPipesArray[self.distanceBetweenPipesPickerView.selectedRow(inComponent: 0)])!
         let indoorTemperature = Double(indoorTemperatureArray[self.indoorTemperaturePickerView.selectedRow(inComponent: 0)])!
         
-        if let square = Double(squareTextField.text!) {
+        if let square = Double(squareTextField.text!), let heatLoss = Double(heatLossTextField.text!) {
             saveDefaults()
 
             let vc = HeatFloorCalculationResultViewController()
             self.delegate = vc
             let navVC = UINavigationController(rootViewController: vc)
             self.delegate?.addHeatFloorCalculationWith(square: square,
+                                                       heatLoss: heatLoss,
                                                        pipeManufacturer: pipeManufacturer,
                                                        floorConstruction: floorConstruction,
                                                        waterTemperature: waterTemperature,
@@ -258,7 +272,10 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
         if let square = squareTextField.text {
             defaults.set(square, forKey: "floorSquare")
         }
-        defaults.set(self.pipeManufacturerPickerView.selectedRow(inComponent: 0), forKey: "pipeManufacturerIndex")
+        if let heatLoss = heatLossTextField.text {
+            defaults.set(heatLoss, forKey: "heatLoss")
+        }
+        defaults.set(self.pipeManufacturerPickerView.selectedRow(inComponent: 0), forKey: "pipeManufactureIndex")
         defaults.set(self.floorConstructionPickerView.selectedRow(inComponent: 0), forKey: "floorConstructionIndex")
         defaults.set(self.temperaturePickerView.selectedRow(inComponent: 0), forKey: "waterTemperatureIndex")
         defaults.set(self.distanceBetweenPipesPickerView.selectedRow(inComponent: 0), forKey: "distanceBetweenPipesIndex")
@@ -267,9 +284,9 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     
     func loadDefaults() {
         let defaults = UserDefaults.standard
-        let square = defaults.string(forKey: "floorSquare")
-        squareTextField.text = square
-        pipeManufacturerPickerView.selectRow(defaults.integer(forKey: "pipeManufacturerIndex"), inComponent: 0, animated: true)
+        squareTextField.text = defaults.string(forKey: "floorSquare")
+        heatLossTextField.text = defaults.string(forKey: "heatLoss")
+        pipeManufacturerPickerView.selectRow(defaults.integer(forKey: "pipeManufactureIndex"), inComponent: 0, animated: true)
         floorConstructionPickerView.selectRow(defaults.integer(forKey: "floorConstructionIndex"), inComponent: 0, animated: true)
         temperaturePickerView.selectRow(defaults.integer(forKey: "waterTemperatureIndex"), inComponent: 0, animated: true)
         distanceBetweenPipesPickerView.selectRow(defaults.integer(forKey: "distanceBetweenPipesIndex"), inComponent: 0, animated: true)

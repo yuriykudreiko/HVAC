@@ -25,7 +25,6 @@ class HeatEngeniringTableViewController: UITableViewController, EngeniringCalcul
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         myVC = EngeniringCalculationViewController()
         myVC?.delegate = self
     }

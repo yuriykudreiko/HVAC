@@ -37,6 +37,12 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
         let label = UILabel()
         label.text = text
         label.font = myFont
+        label.textAlignment = .center
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 8
+        label.backgroundColor = .lightGray
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
         return label
     }
     
@@ -47,6 +53,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
         buttom.layer.cornerRadius = 10
         buttom.titleLabel?.font = myFont
         buttom.setTitleColor(.gray, for: .normal)
+        buttom.translatesAutoresizingMaskIntoConstraints = false
         return buttom
     }
     
@@ -59,14 +66,14 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     
     // MARK: - Items
 
+    let calculateButton : UIButton = {
+        let button = createButton(text: "Пересчитать", color: .turquoise)
+        button.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .touchUpInside)
+        return button
+    }()
+    
     let saveButton : UIButton = {
-        let buttom = UIButton(type: .system)
-        buttom.setTitle("Save", for: .normal)
-        buttom.backgroundColor = .blue
-        buttom.layer.cornerRadius = 10
-        buttom.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        buttom.setTitleColor(.gray, for: .normal)
-        buttom.translatesAutoresizingMaskIntoConstraints = false
+        let buttom = createButton(text: "Сохранить", color: .lightGreen)
         buttom.addTarget(self, action: #selector(saveAction(sender:)), for: .touchUpInside)
         return buttom
     }()
@@ -80,43 +87,31 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     
     private let outdoorTemperatureTextField : UITextField = {
         let sampleTextField = createTextFieldWith(text: "-24", keyboardType: .numbersAndPunctuation, returnKey: .next)
-        sampleTextField.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .editingDidEnd)
-
         return sampleTextField
     }()
     
     private let indoorTemperatureTextField : UITextField = {
         let sampleTextField = createTextFieldWith(text: "18", keyboardType: .numbersAndPunctuation, returnKey: .next)
-        sampleTextField.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .editingDidEnd)
-
         return sampleTextField
     }()
     
     private let wallResistanceTextField : UITextField = {
         let sampleTextField = createTextFieldWith(text: "3.2", keyboardType: .numbersAndPunctuation, returnKey: .next)
-        sampleTextField.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .editingDidEnd)
-
         return sampleTextField
     }()
     
     private let windowResistanceTextField : UITextField = {
         let sampleTextField = createTextFieldWith(text: "1", keyboardType: .numbersAndPunctuation, returnKey: .next)
-        sampleTextField.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .editingDidEnd)
-
         return sampleTextField
     }()
     
     private let ceilingResistanceTextField : UITextField = {
         let sampleTextField = createTextFieldWith(text: "6", keyboardType: .numbersAndPunctuation, returnKey: .next)
-        sampleTextField.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .editingDidEnd)
-
         return sampleTextField
     }()
     
     private let flourResistanceTextField : UITextField = {
         let sampleTextField = createTextFieldWith(text: "2.5", keyboardType: .numbersAndPunctuation, returnKey: .next)
-        sampleTextField.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .editingDidEnd)
-
         return sampleTextField
     }()
     
@@ -206,53 +201,49 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
 
     // MARK: - Layout
     
-    private func createStackViewWith(subviews: [UIView]) -> UIStackView {
+    private func createStackViewWith(subviews: [UIView], axis: UILayoutConstraintAxis) -> UIStackView {
         
         let line = UIStackView(arrangedSubviews: subviews)
-        line.axis = .vertical
+        line.axis = axis
         line.distribution = .fillEqually
         line.spacing = 10
+        line.translatesAutoresizingMaskIntoConstraints = false
         return line
     }
 
     private func layoutSetup() {
         
-        let leftColumnStackView = createStackViewWith(subviews: [outdoorTemperatureLablel, indoorTemperatureLablel, wallResistanceLablel, windowResistanceLablel, ceilingResistanceLablel, flourResistanceLablel])
-        leftColumnStackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(leftColumnStackView)
+        let leftColumnStackView = createStackViewWith(subviews: [outdoorTemperatureLablel, indoorTemperatureLablel, wallResistanceLablel, windowResistanceLablel, ceilingResistanceLablel, flourResistanceLablel], axis: .vertical)
+        let rightColumnStackView = createStackViewWith(subviews: [outdoorTemperatureTextField, indoorTemperatureTextField, wallResistanceTextField, windowResistanceTextField, ceilingResistanceTextField, flourResistanceTextField], axis: .vertical)
+        let mainStackView = createStackViewWith(subviews: [leftColumnStackView, rightColumnStackView], axis: .horizontal)
 
-        let rightColumnStackView = createStackViewWith(subviews: [outdoorTemperatureTextField, indoorTemperatureTextField, wallResistanceTextField, windowResistanceTextField, ceilingResistanceTextField, flourResistanceTextField])
-        rightColumnStackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(rightColumnStackView)
+        view.addSubview(mainStackView)
     
         NSLayoutConstraint.activate([
-            leftColumnStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            leftColumnStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            leftColumnStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
-            leftColumnStackView.heightAnchor.constraint(equalToConstant: 300)
-            ])
+            mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            mainStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            mainStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 10),
+            mainStackView.heightAnchor.constraint(equalToConstant: 400)
+            ]
+        )
         
-        NSLayoutConstraint.activate([
-            rightColumnStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            rightColumnStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            rightColumnStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
-            rightColumnStackView.heightAnchor.constraint(equalToConstant: 300)
-            ])
+        let buttonStack = createStackViewWith(subviews: [saveButton, calculateButton], axis: .horizontal)
         
-        view.addSubview(saveButton)
-        NSLayoutConstraint.activate([
-            saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            saveButton.widthAnchor.constraint(equalToConstant: 150),
-            saveButton.heightAnchor.constraint(equalToConstant: 50)
-            ])
-        
+        view.addSubview(buttonStack)
         view.addSubview(tableView)
+
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: leftColumnStackView.bottomAnchor, constant: 10),
+            buttonStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            buttonStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            buttonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            buttonStack.heightAnchor.constraint(equalToConstant: 60)
+            ])
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: 10),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -10)
+            tableView.bottomAnchor.constraint(equalTo: buttonStack.topAnchor, constant: -10)
             ])
     }
     
@@ -260,36 +251,24 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     
     @objc private func calculationWhenValueChangegAction(sender: UITextField) {
 
-        switch sender {
-            case outdoorTemperatureTextField:
-                if let outTemp = Double(sender.text!) {
-                    calculationResult?.outdoorTemperature = outTemp
-                }
-            case indoorTemperatureTextField:
-                if let indTemp = Double(sender.text!) {
-                    calculationResult?.indoorTemperature = indTemp
-                }
-            case wallResistanceTextField:
-                if let wallRes = Double(sender.text!) {
-                    calculationResult?.wallResistance = wallRes
-                }
-            case windowResistanceTextField:
-                if let windowRes = Double(sender.text!) {
-                    calculationResult?.windowResistance = windowRes
-                }
-            case ceilingResistanceTextField:
-                if let ceilingRes = Double(sender.text!) {
-                    calculationResult?.ceilingResistance = ceilingRes
-                }
-            case flourResistanceTextField:
-                if let flourRes = Double(sender.text!) {
-                    calculationResult?.flourResistance = flourRes
-                }
-        default:
-            break
+        if let outTemp = Double(outdoorTemperatureTextField.text!),
+            let indTemp = Double(indoorTemperatureTextField.text!),
+            let wallRes = Double(wallResistanceTextField.text!),
+            let windowRes = Double(windowResistanceTextField.text!),
+            let ceilingRes = Double(ceilingResistanceTextField.text!),
+            let flourRes = Double(flourResistanceTextField.text!) {
+            
+            calculationResult?.outdoorTemperature = outTemp
+            calculationResult?.indoorTemperature = indTemp
+            calculationResult?.wallResistance = wallRes
+            calculationResult?.windowResistance = windowRes
+            calculationResult?.ceilingResistance = ceilingRes
+            calculationResult?.flourResistance = flourRes
+            calculationResult?.calculateAllConstructionAfterChange()
+            tableView.reloadData()
+        } else {
+            createSaveAlert()
         }
-        calculationResult?.calculateAllConstructionAfterChange()
-        tableView.reloadData()
     }
     
     @objc private func saveAction(sender: UIButton) {
@@ -344,11 +323,10 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     }
     
     private func createSaveAlert() {
-        let alertVC = UIAlertController(title: "Заполните правильно все поля в текущем окне(числами)", message: nil, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Заполните правильно все поля в текущем окне", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
     
     // MARK: - UITableViewDataSource

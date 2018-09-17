@@ -66,7 +66,6 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     var numberOfElement : Int?
     var overwriteMainResult : Bool?
     
-    
     // MARK: - Items
     
     let calculationButton : UIButton = {
