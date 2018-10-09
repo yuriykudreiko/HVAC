@@ -30,33 +30,7 @@ protocol AddNewConstructionViewControllerDelegate {
 }
 
 class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    // MARK: - Static constants and functions
-    
-    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
-    
-    static private func createTextFieldWith(keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
-        let sampleTextField = UITextField()
-        sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = myFont
-        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
-        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.default
-        sampleTextField.returnKeyType = UIReturnKeyType.next
-        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing
-        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
-        return sampleTextField
-    }
-    
-    static private func createLabelWith(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.textAlignment = .center
-        label.font = myFont
-        return label
-    }
-    
+
     // MARK: - Properties
     
     var delegate : AddNewConstructionViewControllerDelegate?
@@ -85,7 +59,7 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
     }()
     
     private let squareTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(keyboardType: .default, returnKey: .done)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .default, returnKey: .done)
         return sampleTextField
     }()
     
@@ -113,8 +87,6 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
 
         if let square = currentConstruction?.square {
             squareTextField.text = String(square)
-        } else {
-            squareTextField.text = ""
         }
 
         orientationAndNamePickerView.dataSource = self
@@ -132,9 +104,6 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
             if let index = orientationAndNameArray[0].index(of: orientation) {
                 orientationAndNamePickerView.selectRow(index, inComponent: 0, animated: true)
                 orientationAndNamePickerView.reloadAllComponents()
-                print("Индекс ориентации = \(index)")
-            } else {
-                print("не нашел")
             }
         }
         
@@ -142,9 +111,6 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
             if let index = orientationAndNameArray[1].index(of: constructionName) {
                 orientationAndNamePickerView.selectRow(index, inComponent: 1, animated: true)
                 orientationAndNamePickerView.reloadAllComponents()
-                print("Индекс конструкции = \(index)")
-            } else {
-                print("не нашел")
             }
         }
     }
@@ -206,17 +172,13 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
         let alertVC = UIAlertController(title: "Введите корректное значение(число) в поле <<Площадь>>", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
     
     // MARK: - Actions
     
     @objc private func cancelButtonAction(sender: UIBarButtonItem) {
-        
-        dismiss(animated: true) {
-            print("AddNewConstructionViewController dismiss")
-        }
+        dismiss(animated: true)
     }
     
     @objc private func saveAction(sender: UIButton) {
@@ -228,13 +190,8 @@ class AddNewConstructionViewController: UIViewController, UIPickerViewDelegate, 
         let constructionName = self.orientationAndNameArray[1][row2]
 
         if let square = Double(squareTextField.text!) {
-            print("\(square)")
-            print("\(orientation)")
-            print("\(constructionName)")
             self.delegate?.addNewConstructionWith(name: constructionName, orientation: orientation, square: square, overwrite: overwrite)
-            dismiss(animated: true) {
-                print("AddNewConstructionViewController save and dismiss")
-            }
+            dismiss(animated: true)
         } else {
             createSaveAlert()
         }

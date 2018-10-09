@@ -10,25 +10,6 @@ import UIKit
 
 class HeatFloorCalculationResultViewController: UIViewController, HeatFloorCalculationViewControllerDelegate {
     
-    // MARK: - Static constants and functions
-    
-    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
-    
-    static private func createLabelWith(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = myFont
-        label.textAlignment = .center
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 8
-        label.backgroundColor = .lightGray
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 0
-        return label
-    }
-
-    // MARK: - Properties
-
     // MARK: - Items
     
     private let pipeLengthLabel : UILabel = {
@@ -164,13 +145,10 @@ class HeatFloorCalculationResultViewController: UIViewController, HeatFloorCalcu
         )
     }
 
-    
     // MARK: - Actions
     
     @objc func backAction() {
-        dismiss(animated: true) {
-            
-        }
+        dismiss(animated: true)
     }
     
     // MARK: - HeatFloorCalculationViewControllerDelegate
@@ -183,13 +161,13 @@ class HeatFloorCalculationResultViewController: UIViewController, HeatFloorCalcu
                                      distanceBetweenPipes: Double,
                                      indoorTemperature: Double) {
         
-        print("square: \(square)\n" +
-            "heatLoss: \(heatLoss)\n" +
-            "pipeManufacturer: \(pipeManufacturer)\n" +
-            "floorConstruction: \(floorConstruction)\n" +
-            "waterTemperature: \(waterTemperature)\n" +
-            "distanceBetweenPipes: \(distanceBetweenPipes)\n" +
-            "indoorTemperature: \(indoorTemperature)")
+//        print("square: \(square)\n" +
+//            "heatLoss: \(heatLoss)\n" +
+//            "pipeManufacturer: \(pipeManufacturer)\n" +
+//            "floorConstruction: \(floorConstruction)\n" +
+//            "waterTemperature: \(waterTemperature)\n" +
+//            "distanceBetweenPipes: \(distanceBetweenPipes)\n" +
+//            "indoorTemperature: \(indoorTemperature)")
         
         
         let hfc = HeatFloorCalculation(square: square,
@@ -200,10 +178,10 @@ class HeatFloorCalculationResultViewController: UIViewController, HeatFloorCalcu
                                        distanceBetweenPipes: distanceBetweenPipes,
                                        indoorTemperature: indoorTemperature)
         
-        let firstLine = createStackViewWith(subviews: [
-            
-            ]
-        )
+//        let firstLine = createStackViewWith(subviews: [
+//
+//            ]
+//        )
         
         pipeLengthResultLabel.text = String(format: "%.2f", hfc.pipeLength!)
         waterFlowResultLabel.text = String(format: "%.2f", hfc.waterFlow!)
@@ -215,6 +193,5 @@ class HeatFloorCalculationResultViewController: UIViewController, HeatFloorCalcu
         if hfc.maxFloorTemperature! >= 26 {
             maxFloorTemperatureResultLabel.backgroundColor = .red
         }
-        
     }
 }

@@ -14,44 +14,12 @@ protocol HeatFloorCalculationViewControllerDelegate {
 
 class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
-    // MARK: - Static constants and functions
-    
-    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
-    
-    static private func createTextFieldWith(keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
-        let sampleTextField = UITextField()
-        sampleTextField.placeholder = "Введите площадь, м²"
-        sampleTextField.font = myFont
-        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
-        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.default
-        sampleTextField.returnKeyType = UIReturnKeyType.next
-        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing
-        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
-        return sampleTextField
-    }
-    
     static private func createPickerView() -> UIPickerView {
         let typePickerView = UIPickerView()
         typePickerView.backgroundColor = .lightGray
         typePickerView.layer.cornerRadius = 8
-        
         typePickerView.translatesAutoresizingMaskIntoConstraints = false
         return typePickerView
-    }
-    
-    static private func createLabelWith(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = myFont
-        label.textAlignment = .center
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 8
-        label.backgroundColor = .lightGray
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 0
-        return label
     }
     
     // MARK: - Properties
@@ -92,12 +60,12 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     }()
     
     private let squareTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(keyboardType: .default, returnKey: .done)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "Площадь, м²", keyboardType: .default, returnKey: .done)
         return sampleTextField
     }()
     
     private let heatLossTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(keyboardType: .default, returnKey: .done)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "Теплопотери, Вт", keyboardType: .default, returnKey: .done)
         return sampleTextField
     }()
     
@@ -231,8 +199,7 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
         let alertVC = UIAlertController(title: "Заполните правильно все поля в текущем окне", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
-            present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
     
     // MARK: - Actions

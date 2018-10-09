@@ -16,35 +16,35 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
 
     // MARK: - Static constants and functions
     
-    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
+    //static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
     
-    static private func createTextFieldWith(text: String, keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
-        let sampleTextField = UITextField()
-        sampleTextField.text = text
-        sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = myFont
-        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
-        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.default
-        sampleTextField.returnKeyType = UIReturnKeyType.next
-        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing
-        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
-        return sampleTextField
-    }
+//    static private func createTextFieldWith(text: String, keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
+//        let sampleTextField = UITextField()
+//        sampleTextField.text = text
+//        sampleTextField.placeholder = "Enter text here"
+//        sampleTextField.font = myFont
+//        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
+//        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
+//        sampleTextField.keyboardType = UIKeyboardType.default
+//        sampleTextField.returnKeyType = UIReturnKeyType.next
+//        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing
+//        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+//        sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
+//        return sampleTextField
+//    }
     
-    static private func createLabelWith(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = myFont
-        label.textAlignment = .center
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 8
-        label.backgroundColor = .lightGray
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 0
-        return label
-    }
+//    static private func createLabelWith(text: String) -> UILabel {
+//        let label = UILabel()
+//        label.text = text
+//        label.font = myFont
+//        label.textAlignment = .center
+//        label.layer.masksToBounds = true
+//        label.layer.cornerRadius = 8
+//        label.backgroundColor = .lightGray
+//        label.lineBreakMode = .byWordWrapping
+//        label.numberOfLines = 0
+//        return label
+//    }
     
     static private func createButton(text: String, color: UIColor) -> UIButton {
         let buttom = UIButton(type: .system)
@@ -86,32 +86,32 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     }()
     
     private let outdoorTemperatureTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "-24", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "-24", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
     private let indoorTemperatureTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "18", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "18", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
     private let wallResistanceTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "3.2", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "3.2", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
     private let windowResistanceTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "1", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "1", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
     private let ceilingResistanceTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "6", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "6", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
     private let flourResistanceTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "2.5", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "2.5", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
@@ -149,7 +149,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if calculationResult == nil {
             self.createAlert()
             let outTemp = Double(outdoorTemperatureTextField.text!)!
@@ -274,32 +274,23 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     @objc private func saveAction(sender: UIButton) {
         
         if let result = self.calculationResult {
-            print(result)
-            print("result upper")
 
             self.delegate?.addHeatLossCalculationWith(result: result, overwrite: overwriteHeatLossResult)
-            
-            dismiss(animated: true) {
-                print(result)
-            }
+            dismiss(animated: true)
         } else {
             createSaveAlert()
         }
     }
     
     @objc private func cancelButtonAction(sender: UIBarButtonItem) {
-        dismiss(animated: true) {
-            print("EnginiringCalculationTableViewController dismiss")
-        }
+        dismiss(animated: true)
     }
     
     @objc private func addConstructionAction(sander: UIBarButtonItem) {
         let vc = AddNewConstructionViewController()
         vc.delegate = self
         let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true) {
-            print("AddNewConstructionViewController create")
-        }
+        present(navVC, animated: true)
     }
     
     // MARK: - Alert
@@ -318,8 +309,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
             }
         })
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
     
     private func createSaveAlert() {
@@ -375,9 +365,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
         vc.currentConstruction = calculationResult?.constructionArray[indexPath.row]
         vc.overwrite = true
         let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true) {
-            print("EngeniringViewController opened")
-        }
+        present(navVC, animated: true)
     }
     
     // MARK: - AddNewConstructionViewControllerDelegate

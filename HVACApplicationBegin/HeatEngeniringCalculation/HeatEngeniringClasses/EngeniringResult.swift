@@ -26,14 +26,7 @@ struct EngeniringResult {
     }
 
     init(calculationName: String, thermalInsulationName: String, normalizedWallResistance: Double, materialArray: [Material], thermalInsulationConductivity: Double) {
-        
-//        var sum = 1/8.7 + 1/23
-//        for layer in materialArray {
-//            sum += (layer.width / layer.thermalConductivity)
-//        }
-//        let insulationWidth = (normalizedWallResistance - sum) * thermalInsulationConductivity
-//        let R = normalizedWallResistance
-//        let λ = thermalInsulationConductivity
+
         let insulationWidth = EngeniringResult.calculateInsulationWidthWith(normalizedWallResistance: normalizedWallResistance, materialArray: materialArray, thermalInsulationConductivity: thermalInsulationConductivity)
 
         self.nameOfCalculation = calculationName
@@ -41,6 +34,4 @@ struct EngeniringResult {
         self.materialArray = materialArray
         self.insulationMaterial = Material(name: thermalInsulationName, width: insulationWidth, thermalConductivity: thermalInsulationConductivity)
     }
-    
-
 }

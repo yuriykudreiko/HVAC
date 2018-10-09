@@ -28,12 +28,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
     // MARK: - Actions
     
     @objc private func addLayerAction(sander: UIBarButtonItem) {
@@ -41,15 +36,12 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
         vc.delegate = self
         vc.overwriteHeatLossResult = false
         let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true) {
-            print("EngeniringViewController create")
-        }
+        present(navVC, animated: true)
     }
 
     // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
@@ -84,23 +76,17 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
         vc.calculationResult = heatLossArray[indexPath.row]
         vc.overwriteHeatLossResult = true
         let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true) {
-            print("EngeniringViewController opened")
-        }
+        present(navVC, animated: true)
     }
     
     // MARK: - AddNewConstructionViewControllerDelegate
     
     func addHeatLossCalculationWith(result: HeatLossResult, overwrite: Bool) {
-        print("Delegate")
-
         if overwrite {
-            print("overwrite")
             if let index = rememberingNumberOfRow {
                 heatLossArray[index] = result
             }
         } else {
-            print("append")
             heatLossArray.append(result)
         }
     }

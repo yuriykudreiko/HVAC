@@ -15,23 +15,18 @@ extension UIColor {
     static var lightGreen = UIColor(red: 80/255, green: 255/255, blue: 0/255, alpha: 1)//(80,255,0)
 }
 
-protocol EngeniringCalculationViewControllerDelegate {
-    func addCalculation(result: EngeniringResult, overwrite: Bool)
-}
-
-class EngeniringCalculationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EngeniringViewControllerDelegate {
-
-    // MARK: - Static constants and functions
+extension UIViewController {
     
-    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
-    
-    static private func createTextFieldWith(text: String, keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
+    static let myFont : UIFont = UIFont.systemFont(ofSize: 14)
+
+    static func createTextFieldWith(text: String, placeholder: String, keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
         let sampleTextField = UITextField()
-        sampleTextField.placeholder = "Enter text here"
+        sampleTextField.text = text
+        sampleTextField.placeholder = placeholder
         sampleTextField.font = myFont
         sampleTextField.borderStyle = UITextBorderStyle.roundedRect
         sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.default
+        sampleTextField.keyboardType = keyboardType
         sampleTextField.returnKeyType = UIReturnKeyType.next
         sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing
         sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
@@ -39,13 +34,26 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         return sampleTextField
     }
     
-    static private func createLabelWith(text: String) -> UILabel {
+    static func createLabelWith(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
         label.font = myFont
+        label.textAlignment = .center
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 8
+        label.backgroundColor = .lightGray
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
         return label
     }
-    
+}
+
+protocol EngeniringCalculationViewControllerDelegate {
+    func addCalculation(result: EngeniringResult, overwrite: Bool)
+}
+
+class EngeniringCalculationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EngeniringViewControllerDelegate {
+
     static private func createButton(text: String, color: UIColor) -> UIButton {
         let buttom = UIButton(type: .system)
         buttom.setTitle(text, for: .normal)
@@ -69,7 +77,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     // MARK: - Items
     
     let calculationButton : UIButton = {
-        let button = createButton(text: "Рассчет", color: .turquoise)
+        let button = createButton(text: "Расчет", color: .turquoise)
         button.addTarget(self, action: #selector(calculationAction(sender:)), for: .touchUpInside)
         return button
     }()
@@ -88,23 +96,23 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     }()
     
     let normalizedWallResistanceTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "3.2", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "3.2", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
     let kindOfMaterialTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", keyboardType: .default, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .default, returnKey: .next)
         return sampleTextField
     }()
     
     let widthTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
         sampleTextField.isEnabled = false
         return sampleTextField
     }()
     
     let thermalConductivityTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", keyboardType: .numbersAndPunctuation, returnKey: .done)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .done)
         return sampleTextField
     }()
     
@@ -119,7 +127,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     }()
     
     let widthLabel : UILabel = {
-        let label = createLabelWith(text: "Рассчетная толщина, δ м")
+        let label = createLabelWith(text: "Расчетная толщина, δ м")
         return label
     }()
     
@@ -170,10 +178,8 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
             let insulationWidth = Double(round(1000 * width)/1000)
             widthTextField.text = String(insulationWidth)
         }
-    
         tableView.delegate = self
         tableView.dataSource = self
-        
         layoutSetup()
     }
     
@@ -181,11 +187,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
     // MARK: - Layout
     
     private func createStackViewWith(subviews: [UIView]) -> UIStackView {
@@ -198,10 +200,10 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
     
     private func createStackLine() -> [UIStackView] {
         
-        let firstLine   = createStackViewWith(subviews: [normalizedWallResistanceLabel, normalizedWallResistanceTextField])
-        let secondLine  = createStackViewWith(subviews: [kindOfMaterialLabel, kindOfMaterialTextField])
-        let thirdLine   = createStackViewWith(subviews: [thermalConductivityLablel, thermalConductivityTextField])
-        let fourth      = createStackViewWith(subviews: [widthLabel, widthTextField])
+        let firstLine = createStackViewWith(subviews: [normalizedWallResistanceLabel, normalizedWallResistanceTextField])
+        let secondLine = createStackViewWith(subviews: [kindOfMaterialLabel, kindOfMaterialTextField])
+        let thirdLine = createStackViewWith(subviews: [thermalConductivityLablel, thermalConductivityTextField])
+        let fourth = createStackViewWith(subviews: [widthLabel, widthTextField])
         
         return [firstLine, secondLine, thirdLine, fourth]
     }
@@ -251,9 +253,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         
         if materialName != "" && thermalConductivity != nil && normalizedWallResistance != nil {
             self.calculationResult = EngeniringResult(calculationName: calculationName, thermalInsulationName: materialName, normalizedWallResistance: normalizedWallResistance!, materialArray: self.calculationArray, thermalInsulationConductivity: thermalConductivity!)
-            
             let insulationWidth = Double(round(1000 * (self.calculationResult?.insulationMaterial.width)!)/1000)
-            
             widthTextField.text = "\(insulationWidth)"
         } else {
             createCalculationAlert()
@@ -264,18 +264,14 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         
         if let result = self.calculationResult {
             self.delegate?.addCalculation(result: result, overwrite: overwriteMainResult!)
-            dismiss(animated: true) {
-                print(self.calculationResult!)
-            }
+            dismiss(animated: true)
         } else {
             createSaveAlert()
         }
     }
     
     @objc private func cancelButtonAction(sender: UIBarButtonItem) {
-        dismiss(animated: true) {
-            print("EnginiringCalculationTableViewController dismiss")
-        }
+        dismiss(animated: true)
     }
     
     @objc private func addLayerAction(sander: UIBarButtonItem) {
@@ -283,9 +279,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         vc.delegate = self
         vc.needToOverwrite = false
         let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true) {
-            print("EngeniringViewController create")
-        }
+        present(navVC, animated: true)
     }
     
     // MARK: - Alerts
@@ -301,8 +295,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
             self.name = textField.text!
         })
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
     
     private func createCalculationAlert() {
@@ -311,8 +304,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
 
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
     
     private func createSaveAlert() {
@@ -321,8 +313,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
     
     // MARK: - UITableViewDataSource
@@ -363,9 +354,7 @@ class EngeniringCalculationViewController: UIViewController, UITableViewDelegate
         vc.material = calculationArray[indexPath.row]
         vc.needToOverwrite = true
         let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true) {
-            print("EngeniringViewController opened")
-        }
+        present(navVC, animated: true)
     }
     
     // MARK: - EngeniringViewControllerDelegate

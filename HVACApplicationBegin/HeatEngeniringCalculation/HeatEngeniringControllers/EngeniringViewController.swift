@@ -13,31 +13,6 @@ protocol EngeniringViewControllerDelegate {
 }
 
 class EngeniringViewController: UIViewController {
-
-    // MARK: - Static constants and functions
-    
-    static private let myFont : UIFont = UIFont.systemFont(ofSize: 14)
-    
-    static private func createTextFieldWith(keyboardType: UIKeyboardType, returnKey: UIReturnKeyType) -> UITextField {
-        let sampleTextField = UITextField()
-        sampleTextField.placeholder = "Enter text here"
-        sampleTextField.font = myFont
-        sampleTextField.borderStyle = UITextBorderStyle.roundedRect
-        sampleTextField.autocorrectionType = UITextAutocorrectionType.no
-        sampleTextField.keyboardType = UIKeyboardType.default
-        sampleTextField.returnKeyType = UIReturnKeyType.next
-        sampleTextField.clearButtonMode = UITextFieldViewMode.whileEditing
-        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.center
-        sampleTextField.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center
-        return sampleTextField
-    }
-    
-    static private func createLabelWith(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = myFont
-        return label
-    }
     
     // MARK: - Properties
     
@@ -48,17 +23,17 @@ class EngeniringViewController: UIViewController {
     // MARK: - Items
     
     private let kindOfMaterialTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(keyboardType: .default, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "Материал", keyboardType: .default, returnKey: .next)
         return sampleTextField
     }()
     
     private let widthTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "Толщина, мм", keyboardType: .numbersAndPunctuation, returnKey: .next)
         return sampleTextField
     }()
     
     private let thermalConductivityTextField : UITextField = {
-        let sampleTextField = createTextFieldWith(keyboardType: .numbersAndPunctuation, returnKey: .done)
+        let sampleTextField = createTextFieldWith(text: "", placeholder: "Теплопроводность", keyboardType: .numbersAndPunctuation, returnKey: .done)
         return sampleTextField
     }()
     
@@ -96,20 +71,14 @@ class EngeniringViewController: UIViewController {
         
         if let name = material?.name {
             kindOfMaterialTextField.text = name
-        } else {
-            kindOfMaterialTextField.text = ""
         }
         
         if let width = material?.width {
             widthTextField.text = String(width)
-        } else {
-            widthTextField.text = ""
         }
         
         if let thermalConductivity = material?.thermalConductivity {
             thermalConductivityTextField.text = String(thermalConductivity)
-        } else {
-            thermalConductivityTextField.text = ""
         }
         
         self.view.backgroundColor = .white
@@ -117,14 +86,8 @@ class EngeniringViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonAction(sender:)))
         
         layoutSetup()
-        buttonLayoutSetup()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     // MARK: - Layout
     
     private func createStackViewWith(subviews: [UIView]) -> UIStackView {
@@ -157,10 +120,8 @@ class EngeniringViewController: UIViewController {
             myStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             myStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             myStackView.heightAnchor.constraint(equalToConstant: 150)
-            ])
-    }
-
-    private func buttonLayoutSetup() {
+            ]
+        )
         
         view.addSubview(saveButton)
         NSLayoutConstraint.activate([
@@ -168,15 +129,14 @@ class EngeniringViewController: UIViewController {
             saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             saveButton.widthAnchor.constraint(equalToConstant: 150),
             saveButton.heightAnchor.constraint(equalToConstant: 50)
-            ])
+            ]
+        )
     }
-    
+
     // MARK: - Actions
     
     @objc private func cancelButtonAction(sender: UIBarButtonItem) {
-        dismiss(animated: true) {
-            print("EngeniringViewController dismiss")
-        }
+        dismiss(animated: true)
     }
     
     @objc private func saveAction(sender: UIButton) {
@@ -189,9 +149,7 @@ class EngeniringViewController: UIViewController {
             
             self.material = Material(name: kind, width: width!, thermalConductivity: thermalConductivity!)
             self.delegate?.addLayerInformation(layer: self.material!, overwrite: needToOverwrite!)
-            dismiss(animated: true) {
-                print(self.material!)
-            }
+            dismiss(animated: true)
         } else {
             createAlert()
         }
@@ -204,7 +162,6 @@ class EngeniringViewController: UIViewController {
         let alertVC = UIAlertController(title: "Правильно заполните все поля в отекущем окне", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
-        present(alertVC, animated: true) {
-        }
+        present(alertVC, animated: true)
     }
 }

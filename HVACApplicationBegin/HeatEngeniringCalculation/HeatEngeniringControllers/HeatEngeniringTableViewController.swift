@@ -64,9 +64,7 @@ class HeatEngeniringTableViewController: UITableViewController, EngeniringCalcul
         myVC?.overwriteMainResult = true
         myVC?.delegate = self
         let navVC = UINavigationController(rootViewController: myVC!)
-        present(navVC, animated: true) {
-            print("EngeniringViewController opened")
-        }
+        present(navVC, animated: true)
     }
     
     //MARK: - EngeniringCalculationViewControllerDelegate
