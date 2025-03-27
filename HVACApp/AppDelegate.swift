@@ -1,0 +1,25 @@
+//
+//  AppDelegate.swift
+//  HVACApplicationBegin
+//
+//  Created by User3 on 24.02.2018.
+//  Copyright © 2018 Yury Kudreika. All rights reserved.
+//
+
+import UIKit
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let tabBar = TabBarViewController()
+        let navVC = UINavigationController(rootViewController: tabBar)
+        window?.rootViewController = navVC
+        window?.makeKeyAndVisible()
+        
+        return true
+    }
+}

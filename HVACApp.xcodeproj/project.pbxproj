@@ -1,0 +1,448 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1F125BA2213C141500A4F59C /* HeatFloorCalculationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F125BA1213C141500A4F59C /* HeatFloorCalculationViewController.swift */; };
+		1F3F652A213DC16600446C27 /* HeatFloorCalculationResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F6529213DC16600446C27 /* HeatFloorCalculationResultViewController.swift */; };
+		1F3F654D213DD1B400446C27 /* HeatFloorCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F654C213DD1B400446C27 /* HeatFloorCalculation.swift */; };
+		1FC86FFC204FF0BA003C25C6 /* EngeniringResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC86FFB204FF0BA003C25C6 /* EngeniringResult.swift */; };
+		1FC86FFE20502AE8003C25C6 /* EngeniringCalculationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC86FFD20502AE8003C25C6 /* EngeniringCalculationViewController.swift */; };
+		1FC91CBF20417CEF007B9680 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC91CBE20417CEF007B9680 /* AppDelegate.swift */; };
+		1FC91CC620417CEF007B9680 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FC91CC520417CEF007B9680 /* Assets.xcassets */; };
+		1FC91CC920417CEF007B9680 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FC91CC720417CEF007B9680 /* LaunchScreen.storyboard */; };
+		1FC91CD120417D39007B9680 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC91CD020417D39007B9680 /* TabBarViewController.swift */; };
+		1FC91CD520417ED9007B9680 /* HeatEngeniringTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC91CD420417ED9007B9680 /* HeatEngeniringTableViewController.swift */; };
+		1FC91CD720417F09007B9680 /* HeatLossTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC91CD620417F09007B9680 /* HeatLossTableViewController.swift */; };
+		1FCF4A0B205CF1AD005FD387 /* HeatLossResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF4A0A205CF1AD005FD387 /* HeatLossResult.swift */; };
+		1FCF92C4205AD57F00179C9E /* AddNewConstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C3205AD57F00179C9E /* AddNewConstructionViewController.swift */; };
+		1FCF92C6205ADC9E00179C9E /* Construction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C5205ADC9E00179C9E /* Construction.swift */; };
+		1FCF92CA205AE77500179C9E /* HeatLossCalculationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C9205AE77500179C9E /* HeatLossCalculationViewController.swift */; };
+		1FDF37D4204EF65A00668AD6 /* EngeniringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */; };
+		1FDF37D6204F0DDE00668AD6 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDF37D5204F0DDE00668AD6 /* Material.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1F125BA1213C141500A4F59C /* HeatFloorCalculationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatFloorCalculationViewController.swift; sourceTree = "<group>"; };
+		1F3F6529213DC16600446C27 /* HeatFloorCalculationResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatFloorCalculationResultViewController.swift; sourceTree = "<group>"; };
+		1F3F654C213DD1B400446C27 /* HeatFloorCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatFloorCalculation.swift; sourceTree = "<group>"; };
+		1FC86FFB204FF0BA003C25C6 /* EngeniringResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngeniringResult.swift; sourceTree = "<group>"; };
+		1FC86FFD20502AE8003C25C6 /* EngeniringCalculationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngeniringCalculationViewController.swift; sourceTree = "<group>"; };
+		1FC91CBB20417CEF007B9680 /* HVACApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HVACApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FC91CBE20417CEF007B9680 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1FC91CC520417CEF007B9680 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1FC91CC820417CEF007B9680 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1FC91CCA20417CEF007B9680 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1FC91CD020417D39007B9680 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		1FC91CD420417ED9007B9680 /* HeatEngeniringTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatEngeniringTableViewController.swift; sourceTree = "<group>"; };
+		1FC91CD620417F09007B9680 /* HeatLossTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossTableViewController.swift; sourceTree = "<group>"; };
+		1FCF4A0A205CF1AD005FD387 /* HeatLossResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossResult.swift; sourceTree = "<group>"; };
+		1FCF92C3205AD57F00179C9E /* AddNewConstructionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewConstructionViewController.swift; sourceTree = "<group>"; };
+		1FCF92C5205ADC9E00179C9E /* Construction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Construction.swift; sourceTree = "<group>"; };
+		1FCF92C9205AE77500179C9E /* HeatLossCalculationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossCalculationViewController.swift; sourceTree = "<group>"; };
+		1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngeniringViewController.swift; sourceTree = "<group>"; };
+		1FDF37D5204F0DDE00668AD6 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1FC91CB820417CEF007B9680 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F125BA3213C142300A4F59C /* UnderfloorHeating */ = {
+			isa = PBXGroup;
+			children = (
+				1F3F654B213DD17C00446C27 /* HeatFloorControllers */,
+				1F3F654E213DD1B800446C27 /* HeatFloorClasses */,
+			);
+			path = UnderfloorHeating;
+			sourceTree = "<group>";
+		};
+		1F3F654B213DD17C00446C27 /* HeatFloorControllers */ = {
+			isa = PBXGroup;
+			children = (
+				1F125BA1213C141500A4F59C /* HeatFloorCalculationViewController.swift */,
+				1F3F6529213DC16600446C27 /* HeatFloorCalculationResultViewController.swift */,
+			);
+			path = HeatFloorControllers;
+			sourceTree = "<group>";
+		};
+		1F3F654E213DD1B800446C27 /* HeatFloorClasses */ = {
+			isa = PBXGroup;
+			children = (
+				1F3F654C213DD1B400446C27 /* HeatFloorCalculation.swift */,
+			);
+			path = HeatFloorClasses;
+			sourceTree = "<group>";
+		};
+		1FAE7BC52052B58200D142B9 /* HeatEngeniring */ = {
+			isa = PBXGroup;
+			children = (
+				1FAE7BC72052D74900D142B9 /* HeatEngeniringControllers */,
+				1FAE7BC82052D75E00D142B9 /* HeatEngeniringClasses */,
+			);
+			path = HeatEngeniring;
+			sourceTree = "<group>";
+		};
+		1FAE7BC62052B59600D142B9 /* HeatLoss */ = {
+			isa = PBXGroup;
+			children = (
+				1FCF92C7205ADCA800179C9E /* HeatLossControllers */,
+				1FCF92C8205ADCC300179C9E /* HeatLossClasses */,
+			);
+			path = HeatLoss;
+			sourceTree = "<group>";
+		};
+		1FAE7BC72052D74900D142B9 /* HeatEngeniringControllers */ = {
+			isa = PBXGroup;
+			children = (
+				1FC91CD420417ED9007B9680 /* HeatEngeniringTableViewController.swift */,
+				1FC86FFD20502AE8003C25C6 /* EngeniringCalculationViewController.swift */,
+				1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */,
+			);
+			path = HeatEngeniringControllers;
+			sourceTree = "<group>";
+		};
+		1FAE7BC82052D75E00D142B9 /* HeatEngeniringClasses */ = {
+			isa = PBXGroup;
+			children = (
+				1FC86FFB204FF0BA003C25C6 /* EngeniringResult.swift */,
+				1FDF37D5204F0DDE00668AD6 /* Material.swift */,
+			);
+			path = HeatEngeniringClasses;
+			sourceTree = "<group>";
+		};
+		1FC91CB220417CEF007B9680 = {
+			isa = PBXGroup;
+			children = (
+				1FC91CBD20417CEF007B9680 /* HVACApp */,
+				1FC91CBC20417CEF007B9680 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1FC91CBC20417CEF007B9680 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1FC91CBB20417CEF007B9680 /* HVACApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1FC91CBD20417CEF007B9680 /* HVACApp */ = {
+			isa = PBXGroup;
+			children = (
+				1FC91CBE20417CEF007B9680 /* AppDelegate.swift */,
+				1FC91CC520417CEF007B9680 /* Assets.xcassets */,
+				1FC91CC720417CEF007B9680 /* LaunchScreen.storyboard */,
+				1FC91CCA20417CEF007B9680 /* Info.plist */,
+				1FC91CD020417D39007B9680 /* TabBarViewController.swift */,
+				1FAE7BC52052B58200D142B9 /* HeatEngeniring */,
+				1FAE7BC62052B59600D142B9 /* HeatLoss */,
+				1F125BA3213C142300A4F59C /* UnderfloorHeating */,
+			);
+			path = HVACApp;
+			sourceTree = "<group>";
+		};
+		1FCF92C7205ADCA800179C9E /* HeatLossControllers */ = {
+			isa = PBXGroup;
+			children = (
+				1FC91CD620417F09007B9680 /* HeatLossTableViewController.swift */,
+				1FCF92C9205AE77500179C9E /* HeatLossCalculationViewController.swift */,
+				1FCF92C3205AD57F00179C9E /* AddNewConstructionViewController.swift */,
+			);
+			path = HeatLossControllers;
+			sourceTree = "<group>";
+		};
+		1FCF92C8205ADCC300179C9E /* HeatLossClasses */ = {
+			isa = PBXGroup;
+			children = (
+				1FCF4A0A205CF1AD005FD387 /* HeatLossResult.swift */,
+				1FCF92C5205ADC9E00179C9E /* Construction.swift */,
+			);
+			path = HeatLossClasses;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1FC91CBA20417CEF007B9680 /* HVACApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FC91CCD20417CEF007B9680 /* Build configuration list for PBXNativeTarget "HVACApp" */;
+			buildPhases = (
+				1FC91CB720417CEF007B9680 /* Sources */,
+				1FC91CB820417CEF007B9680 /* Frameworks */,
+				1FC91CB920417CEF007B9680 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HVACApp;
+			productName = HVACApplicationBegin;
+			productReference = 1FC91CBB20417CEF007B9680 /* HVACApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1FC91CB320417CEF007B9680 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 1220;
+				ORGANIZATIONNAME = "Yury Kudreika";
+				TargetAttributes = {
+					1FC91CBA20417CEF007B9680 = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1000;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1FC91CB620417CEF007B9680 /* Build configuration list for PBXProject "HVACApp" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1FC91CB220417CEF007B9680;
+			productRefGroup = 1FC91CBC20417CEF007B9680 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1FC91CBA20417CEF007B9680 /* HVACApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1FC91CB920417CEF007B9680 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FC91CC920417CEF007B9680 /* LaunchScreen.storyboard in Resources */,
+				1FC91CC620417CEF007B9680 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1FC91CB720417CEF007B9680 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FCF92C4205AD57F00179C9E /* AddNewConstructionViewController.swift in Sources */,
+				1FC86FFE20502AE8003C25C6 /* EngeniringCalculationViewController.swift in Sources */,
+				1FDF37D6204F0DDE00668AD6 /* Material.swift in Sources */,
+				1F3F652A213DC16600446C27 /* HeatFloorCalculationResultViewController.swift in Sources */,
+				1FC91CD120417D39007B9680 /* TabBarViewController.swift in Sources */,
+				1FC91CBF20417CEF007B9680 /* AppDelegate.swift in Sources */,
+				1FCF4A0B205CF1AD005FD387 /* HeatLossResult.swift in Sources */,
+				1FCF92CA205AE77500179C9E /* HeatLossCalculationViewController.swift in Sources */,
+				1FCF92C6205ADC9E00179C9E /* Construction.swift in Sources */,
+				1FC91CD520417ED9007B9680 /* HeatEngeniringTableViewController.swift in Sources */,
+				1FDF37D4204EF65A00668AD6 /* EngeniringViewController.swift in Sources */,
+				1F3F654D213DD1B400446C27 /* HeatFloorCalculation.swift in Sources */,
+				1F125BA2213C141500A4F59C /* HeatFloorCalculationViewController.swift in Sources */,
+				1FC91CD720417F09007B9680 /* HeatLossTableViewController.swift in Sources */,
+				1FC86FFC204FF0BA003C25C6 /* EngeniringResult.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1FC91CC720417CEF007B9680 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1FC91CC820417CEF007B9680 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1FC91CCB20417CEF007B9680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1FC91CCC20417CEF007B9680 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1FC91CCE20417CEF007B9680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 924SCD8L5K;
+				INFOPLIST_FILE = HVACApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.test.hvac.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1FC91CCF20417CEF007B9680 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 924SCD8L5K;
+				INFOPLIST_FILE = HVACApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.test.hvac.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1FC91CB620417CEF007B9680 /* Build configuration list for PBXProject "HVACApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FC91CCB20417CEF007B9680 /* Debug */,
+				1FC91CCC20417CEF007B9680 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FC91CCD20417CEF007B9680 /* Build configuration list for PBXNativeTarget "HVACApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FC91CCE20417CEF007B9680 /* Debug */,
+				1FC91CCF20417CEF007B9680 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1FC91CB320417CEF007B9680 /* Project object */;
+}
