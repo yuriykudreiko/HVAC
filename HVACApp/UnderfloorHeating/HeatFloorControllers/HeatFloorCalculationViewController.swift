@@ -1,6 +1,6 @@
 //
 //  HeatFloorCalculationViewController.swift
-//  HVACApplicationBegin
+//  HVACApp
 //
 //  Created by Yra on 02.09.2018.
 //  Copyright © 2018 Yury Kudreika. All rights reserved.
@@ -147,6 +147,8 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = "Расчет внутрипольного отопления"
+
         calculateButton.addTarget(self, action: #selector(calculateAction), for: .touchUpInside)
         
         view.backgroundColor = .white

@@ -1,6 +1,6 @@
 //
 //  HeatEngeniringTableViewController.swift
-//  HVACApplicationBegin
+//  HVACApp
 //
 //  Created by User3 on 24.02.2018.
 //  Copyright © 2018 Yury Kudreika. All rights reserved.
@@ -16,12 +16,33 @@ class HeatEngeniringTableViewController: UITableViewController {
     var rememberingNumberOfRow: Int?
     
     // MARK: - ViewController lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        navigationItem.title = "Теплотехнический расчет"
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addButton(_:))
+        )
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         //        dispatchPrecondition(condition: .onQueue(.global()))
         tableView.reloadData()
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func addButton(_ sender: UIBarButtonItem) {
+        let viewController = EngeniringCalculationViewController()
+        viewController.delegate = self
+        viewController.overwriteMainResult = false
+        let navVC = UINavigationController(rootViewController: viewController)
+        present(navVC, animated: true)
     }
     
 }

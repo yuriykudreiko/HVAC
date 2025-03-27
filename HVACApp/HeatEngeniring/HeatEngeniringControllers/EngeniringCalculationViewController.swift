@@ -1,6 +1,6 @@
 //
 //  EngeniringCalculationViewController.swift
-//  HVACApplicationBegin
+//  HVACApp
 //
 //  Created by User3 on 07.03.2018.
 //  Copyright © 2018 Yury Kudreika. All rights reserved.
@@ -17,29 +17,30 @@ class EngeniringCalculationViewController: UIViewController {
     // MARK: - Properties
     
     var delegate: EngeniringCalculationViewControllerDelegate?
-    private var name: String?
-    private var calculationArray: [Material] = []
-    private var thermalInsulationMaterial: Material?
+
     var calculationResult: EngeniringResult?
     var numberOfElement: Int?
     var overwriteMainResult: Bool?
     
+    private var name: String?
+    private var calculationArray: [Material] = []
+    private var thermalInsulationMaterial: Material?
+    
     // MARK: - Items
     
     let calculationButton: UIButton = {
-        let button = createButton(text: "Расчет", color: .turquoise)
-        return button
+        return createButton(text: "Расчет", color: .turquoise)
     }()
     
     let saveButton: UIButton = {
-        let buttom = createButton(text: "Сохранить", color: .lightGreen)
-        return buttom
+        return createButton(text: "Сохранить", color: .lightGreen)
     }()
     
     let tableView: UITableView = {
         let myTableView = UITableView()
         myTableView.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
         myTableView.translatesAutoresizingMaskIntoConstraints = false
+        
         return myTableView
     }()
     
@@ -74,6 +75,7 @@ class EngeniringCalculationViewController: UIViewController {
         )
         
         sampleTextField.isEnabled = false
+        
         return sampleTextField
     }()
     
@@ -88,23 +90,19 @@ class EngeniringCalculationViewController: UIViewController {
     }()
     
     let normalizedWallResistanceLabel: UILabel = {
-        let label = createLabelWith(text: "Rнорм, м²·°C/Вт")
-        return label
+        return createLabelWith(text: "Rнорм, м²·°C/Вт")
     }()
     
     let kindOfMaterialLabel: UILabel = {
-        let label = createLabelWith(text: "Материал")
-        return label
+        return createLabelWith(text: "Материал")
     }()
     
     let widthLabel: UILabel = {
-        let label = createLabelWith(text: "Расчетная толщина, δ м")
-        return label
+        return createLabelWith(text: "Расчетная толщина, δ м")
     }()
     
     let thermalConductivityLablel: UILabel = {
-        let label = createLabelWith(text: "Теплопроводность, λ")
-        return label
+        return createLabelWith(text: "Теплопроводность, λ")
     }()
     
     // MARK: - ViewController lifecycle
@@ -112,8 +110,16 @@ class EngeniringCalculationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        calculationButton.addTarget(self, action: #selector(calculationAction(sender:)), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(saveAction(sender:)), for: .touchUpInside)
+        calculationButton.addTarget(
+            self,
+            action: #selector(calculationAction(sender:)),
+            for: .touchUpInside
+        )
+        saveButton.addTarget(
+            self,
+            action: #selector(saveAction(sender:)),
+            for: .touchUpInside
+        )
         
         calculationArray = calculationResult?.materialArray ?? []
         
@@ -123,8 +129,16 @@ class EngeniringCalculationViewController: UIViewController {
         }
         
         navigationItem.title = "Теплоизоляция"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonAction(sender:)))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLayerAction(sander:)))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .cancel,
+            target: self,
+            action: #selector(cancelButtonAction(sender:))
+        )
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addLayerAction(sander:))
+        )
         
         if let calculation = calculationResult?.nameOfCalculation {
             name = calculation
@@ -149,7 +163,7 @@ class EngeniringCalculationViewController: UIViewController {
         }
         
         if let width = calculationResult?.insulationMaterial.width {
-            let insulationWidth = Double(round(1000 * width)/1000)
+            let insulationWidth = Double(round(1000 * width) / 1000)
             widthTextField.text = String(insulationWidth)
         }
         

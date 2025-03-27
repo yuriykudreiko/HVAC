@@ -1,6 +1,6 @@
 //
 //  HeatLossTableViewController.swift
-//  HVACApplicationBegin
+//  HVACApp
 //
 //  Created by User3 on 24.02.2018.
 //  Copyright © 2018 Yury Kudreika. All rights reserved.
@@ -12,7 +12,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     
     // MARK: - Properties
     
-    var myVC: HeatLossCalculationViewController?
+    var myVC: HeatLossViewController?
     var heatLossArray: [HeatLossResult] = []
     var rememberingNumberOfRow: Int?
     
@@ -21,6 +21,8 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = "Расчет теплопотерь"
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
@@ -37,7 +39,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     // MARK: - Actions
     
     @objc private func addLayerAction(sander: UIBarButtonItem) {
-        let vc = HeatLossCalculationViewController()
+        let vc = HeatLossViewController()
         vc.delegate = self
         vc.overwriteHeatLossResult = false
         let navVC = UINavigationController(rootViewController: vc)
@@ -73,7 +75,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         rememberingNumberOfRow = indexPath.row
-        let vc = HeatLossCalculationViewController()
+        let vc = HeatLossViewController()
         vc.delegate = self
         vc.calculationResult = heatLossArray[indexPath.row]
         vc.overwriteHeatLossResult = true
