@@ -19,7 +19,7 @@
 		1FC91CD520417ED9007B9680 /* HeatEngeniringTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC91CD420417ED9007B9680 /* HeatEngeniringTableViewController.swift */; };
 		1FC91CD720417F09007B9680 /* HeatLossTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC91CD620417F09007B9680 /* HeatLossTableViewController.swift */; };
 		1FCF4A0B205CF1AD005FD387 /* HeatLossResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF4A0A205CF1AD005FD387 /* HeatLossResult.swift */; };
-		1FCF92C4205AD57F00179C9E /* AddNewConstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C3205AD57F00179C9E /* AddNewConstructionViewController.swift */; };
+		1FCF92C4205AD57F00179C9E /* AddConstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C3205AD57F00179C9E /* AddConstructionViewController.swift */; };
 		1FCF92C6205ADC9E00179C9E /* Construction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C5205ADC9E00179C9E /* Construction.swift */; };
 		1FCF92CA205AE77500179C9E /* HeatLossViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C9205AE77500179C9E /* HeatLossViewController.swift */; };
 		1FDF37D4204EF65A00668AD6 /* EngeniringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */; };
@@ -43,7 +43,7 @@
 		1FC91CD420417ED9007B9680 /* HeatEngeniringTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatEngeniringTableViewController.swift; sourceTree = "<group>"; };
 		1FC91CD620417F09007B9680 /* HeatLossTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossTableViewController.swift; sourceTree = "<group>"; };
 		1FCF4A0A205CF1AD005FD387 /* HeatLossResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossResult.swift; sourceTree = "<group>"; };
-		1FCF92C3205AD57F00179C9E /* AddNewConstructionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewConstructionViewController.swift; sourceTree = "<group>"; };
+		1FCF92C3205AD57F00179C9E /* AddConstructionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddConstructionViewController.swift; sourceTree = "<group>"; };
 		1FCF92C5205ADC9E00179C9E /* Construction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Construction.swift; sourceTree = "<group>"; };
 		1FCF92C9205AE77500179C9E /* HeatLossViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossViewController.swift; sourceTree = "<group>"; };
 		1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngeniringViewController.swift; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 			children = (
 				1FC91CD620417F09007B9680 /* HeatLossTableViewController.swift */,
 				1FCF92C9205AE77500179C9E /* HeatLossViewController.swift */,
-				1FCF92C3205AD57F00179C9E /* AddNewConstructionViewController.swift */,
+				1FCF92C3205AD57F00179C9E /* AddConstructionViewController.swift */,
 			);
 			path = HeatLossControllers;
 			sourceTree = "<group>";
@@ -266,7 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FCF92C4205AD57F00179C9E /* AddNewConstructionViewController.swift in Sources */,
+				1FCF92C4205AD57F00179C9E /* AddConstructionViewController.swift in Sources */,
 				1FC86FFE20502AE8003C25C6 /* EngeniringCalculationViewController.swift in Sources */,
 				1FDF37D6204F0DDE00668AD6 /* Material.swift in Sources */,
 				1F3F652A213DC16600446C27 /* HeatFloorCalculationResultViewController.swift in Sources */,

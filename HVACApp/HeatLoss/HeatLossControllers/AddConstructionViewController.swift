@@ -1,5 +1,5 @@
 //
-//  AddNewConstructionViewController.swift
+//  AddConstructionViewController.swift
 //  HVACApp
 //
 //  Created by User3 on 15.03.2018.
@@ -25,19 +25,19 @@ import UIKit
 //var coefficientN: Double
 //var heatLoss: Double
 
-protocol AddNewConstructionViewControllerDelegate {
-    func addNewConstructionWith(name: String, orientation: String, square: Double, overwrite: Bool)
+protocol AddConstructionViewControllerDelegate {
+    func addConstructionWith(name: String, orientation: String, square: Double, overwrite: Bool)
 }
 
-class AddNewConstructionViewController: UIViewController {
+class AddConstructionViewController: UIViewController {
     
     // MARK: - Properties
     
-    var delegate: AddNewConstructionViewControllerDelegate?
+    var delegate: AddConstructionViewControllerDelegate?
     var currentConstruction: Construction?
     var overwrite: Bool = false
     
-    private var orientationAndNameArray = [["св", "с", "сз", "з", "юз", "ю", "юв", "в"],
+    private let orientationAndNameArray = [["св", "с", "сз", "з", "юз", "ю", "юв", "в"],
                                            ["Стена", "Окно", "Дверь", "Пол", "Покрытие"]]
     
     // MARK: - Items
@@ -51,27 +51,24 @@ class AddNewConstructionViewController: UIViewController {
     }()
     
     private let nameLabel: UILabel = {
-        let label = createLabelWith(text: "Наименование")
-        
-        return label
+        return createLabelWith(text: "Наименование")
     }()
     
     private let orientationLabel: UILabel = {
-        let label = createLabelWith(text: "Ориентация")
-        
-        return label
+        return createLabelWith(text: "Ориентация")
     }()
     
     private let squareTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .default, returnKey: .done)
-        
-        return sampleTextField
+        return createTextFieldWith(
+            text: "",
+            placeholder: "",
+            keyboardType: .default,
+            returnKey: .done
+        )
     }()
     
     private let squareLabel: UILabel = {
-        let label = createLabelWith(text: "Площадь, м²")
-        
-        return label
+        return createLabelWith(text: "Площадь, м²")
     }()
     
     private lazy var saveButton: UIButton = {
@@ -97,6 +94,8 @@ class AddNewConstructionViewController: UIViewController {
         }
         
         orientationAndNamePickerView.dataSource = self
+        orientationAndNamePickerView.delegate = self
+        
         layoutSetup()
         view.backgroundColor = .white
         
@@ -124,16 +123,17 @@ class AddNewConstructionViewController: UIViewController {
     // MARK: - Layout
     
     private func createStackViewWith(subviews: [UIView]) -> UIStackView {
-        
         let line = UIStackView(arrangedSubviews: subviews)
         line.distribution = .fillEqually
         line.spacing = 10
+        
         return line
     }
     
     private func createStackLine() -> [UIStackView] {
         let firstLine = createStackViewWith(subviews: [squareLabel, squareTextField])
         let secondLine = createStackViewWith(subviews: [orientationLabel, nameLabel])
+        
         return [firstLine, secondLine]
     }
     
@@ -192,7 +192,7 @@ class AddNewConstructionViewController: UIViewController {
         let constructionName = orientationAndNameArray[1][row2]
         
         if let square = Double(squareTextField.text!) {
-            delegate?.addNewConstructionWith(name: constructionName, orientation: orientation, square: square, overwrite: overwrite)
+            delegate?.addConstructionWith(name: constructionName, orientation: orientation, square: square, overwrite: overwrite)
             dismiss(animated: true)
         } else {
             createSaveAlert()
@@ -203,7 +203,7 @@ class AddNewConstructionViewController: UIViewController {
 
 // MARK: - UIPickerViewDataSource
 
-extension AddNewConstructionViewController: UIPickerViewDataSource {
+extension AddConstructionViewController: UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return orientationAndNameArray.count
@@ -213,7 +213,11 @@ extension AddNewConstructionViewController: UIPickerViewDataSource {
         return orientationAndNameArray[component].count
     }
     
-    // MARK: - UIPickerViewDelegate
+}
+
+// MARK: - UIPickerViewDelegate
+
+extension AddConstructionViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return orientationAndNameArray[component][row]

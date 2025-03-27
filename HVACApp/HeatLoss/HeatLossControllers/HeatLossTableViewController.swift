@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HeatLossTableViewController: UITableViewController, HeatLossCalculationViewControllerDelegate {
+class HeatLossTableViewController: UITableViewController {
     
     // MARK: - Properties
     
@@ -16,6 +16,8 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     var heatLossArray: [HeatLossResult] = []
     var rememberingNumberOfRow: Int?
     
+    private let cellIdentifier = "HeatLossCell"
+
     // MARK: - ViewController lifecycle
     
     override func viewDidLoad() {
@@ -34,6 +36,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
         super.viewWillAppear(animated)
         
         tableView.reloadData()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
     // MARK: - Actions
@@ -53,9 +56,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellIdentifier = "HeatLossCell"
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         cell.textLabel?.text = heatLossArray[indexPath.row].calculationName
         
         var sum: Double = 0
@@ -83,7 +84,11 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
         present(navVC, animated: true)
     }
     
-    // MARK: - AddNewConstructionViewControllerDelegate
+}
+
+// MARK: - HeatLossViewControllerDelegate
+
+extension HeatLossTableViewController: HeatLossViewControllerDelegate {
     
     func addHeatLossCalculationWith(result: HeatLossResult, overwrite: Bool) {
         if overwrite {

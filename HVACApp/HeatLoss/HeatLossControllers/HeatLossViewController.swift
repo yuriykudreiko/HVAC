@@ -8,15 +8,15 @@
 
 import UIKit
 
-protocol HeatLossCalculationViewControllerDelegate {
+protocol HeatLossViewControllerDelegate {
     func addHeatLossCalculationWith(result: HeatLossResult, overwrite: Bool)
 }
 
-class HeatLossViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AddNewConstructionViewControllerDelegate {
+class HeatLossViewController: UIViewController {
     
     // MARK: - Properties
     
-    var delegate: HeatLossCalculationViewControllerDelegate?
+    var delegate: HeatLossViewControllerDelegate?
     var calculationResult: HeatLossResult?
     private var rememberNumberOfElement: Int?
     var overwriteHeatLossResult: Bool = false
@@ -294,7 +294,7 @@ class HeatLossViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @objc private func addConstructionAction(sander: UIBarButtonItem) {
-        let vc = AddNewConstructionViewController()
+        let vc = AddConstructionViewController()
         vc.delegate = self
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
@@ -328,7 +328,11 @@ class HeatLossViewController: UIViewController, UITableViewDelegate, UITableView
         present(alertVC, animated: true)
     }
     
-    // MARK: - UITableViewDataSource
+}
+
+// MARK: - UITableViewDataSource
+
+extension HeatLossViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (calculationResult?.constructionArray.count)!
     }
@@ -360,12 +364,16 @@ class HeatLossViewController: UIViewController, UITableViewDelegate, UITableView
         
         return cell
     }
+}
+
+// MARK: - UITableViewDelegate
+
+extension HeatLossViewController: UITableViewDelegate {
     
-    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         rememberNumberOfElement = indexPath.row
-        let vc = AddNewConstructionViewController()
+        let vc = AddConstructionViewController()
         vc.delegate = self
         vc.currentConstruction = calculationResult?.constructionArray[indexPath.row]
         vc.overwrite = true
@@ -373,9 +381,13 @@ class HeatLossViewController: UIViewController, UITableViewDelegate, UITableView
         present(navVC, animated: true)
     }
     
-    // MARK: - AddNewConstructionViewControllerDelegate
+}
+
+// MARK: - AddNewConstructionViewControllerDelegate
+
+extension HeatLossViewController: AddConstructionViewControllerDelegate {
     
-    func addNewConstructionWith(name: String, orientation: String, square: Double, overwrite: Bool) {
+    func addConstructionWith(name: String, orientation: String, square: Double, overwrite: Bool) {
         if overwrite {
             if let index = rememberNumberOfElement {
                 let newConstruction = calculationResult?.calculateConstructionWith(name: name, square: square, orientation: orientation)
@@ -386,4 +398,5 @@ class HeatLossViewController: UIViewController, UITableViewDelegate, UITableView
             calculationResult?.constructionArray.append(newConstruction!)
         }
     }
+    
 }
