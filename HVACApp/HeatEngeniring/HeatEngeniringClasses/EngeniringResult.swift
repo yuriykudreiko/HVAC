@@ -9,15 +9,17 @@
 import Foundation
 
 struct EngeniringResult {
+    
     var nameOfCalculation: String
     var normalizedWallResistance: Double
     var materialArray: [Material]
     var insulationMaterial: Material
     
-    static func calculateInsulationWidthWith(normalizedWallResistance: Double,
-                                             materialArray: [Material],
-                                             thermalInsulationConductivity: Double) -> Double {
-
+    static func calculateInsulationWidthWith(
+        normalizedWallResistance: Double,
+        materialArray: [Material],
+        thermalInsulationConductivity: Double
+    ) -> Double {
         var sum = 1 / 8.7 + 1 / 23
         
         for layer in materialArray {
@@ -28,13 +30,13 @@ struct EngeniringResult {
         
         return insulationWidth
     }
-
+    
     init(
         calculationName: String,
-         thermalInsulationName: String,
-         normalizedWallResistance: Double,
-         materialArray: [Material],
-         thermalInsulationConductivity: Double
+        thermalInsulationName: String,
+        normalizedWallResistance: Double,
+        materialArray: [Material],
+        thermalInsulationConductivity: Double
     ) {
         //        var sum = 1/8.7 + 1/23
         //        for layer in materialArray {
@@ -43,12 +45,21 @@ struct EngeniringResult {
         //        let insulationWidth = (normalizedWallResistance - sum) * thermalInsulationConductivity
         //        let R = normalizedWallResistance
         //        let λ = thermalInsulationConductivity
-
-        let insulationWidth = EngeniringResult.calculateInsulationWidthWith(normalizedWallResistance: normalizedWallResistance, materialArray: materialArray, thermalInsulationConductivity: thermalInsulationConductivity)
-
+        
+        let insulationWidth = EngeniringResult.calculateInsulationWidthWith(
+            normalizedWallResistance: normalizedWallResistance,
+            materialArray: materialArray,
+            thermalInsulationConductivity: thermalInsulationConductivity
+        )
+        
         self.nameOfCalculation = calculationName
         self.normalizedWallResistance = normalizedWallResistance
         self.materialArray = materialArray
-        self.insulationMaterial = Material(name: thermalInsulationName, width: insulationWidth, thermalConductivity: thermalInsulationConductivity)
+        self.insulationMaterial = Material(
+            name: thermalInsulationName,
+            width: insulationWidth,
+            thermalConductivity: thermalInsulationConductivity
+        )
     }
+    
 }

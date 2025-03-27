@@ -42,17 +42,21 @@ class HeatFloorCalculation {
             //print("speed: \(speed) м/с, pressureDrop: \(pressureDropPerMeter)")
             if speed < 0.25 {
                 currentDiameter = pipesStandardSizes.first
+                
                 if let d = currentDiameter {
                     pressureDrop = calcilatePressureDropPerMeterWith(diameter: d.1, speed: speed)
                 }
             } else if 0.25 <= speed && speed <= 0.7 {
                 currentDiameter = pipe
+                
                 if let d = currentDiameter {
                     pressureDrop = calcilatePressureDropPerMeterWith(diameter: d.1, speed: speed)
                 }
+                
                 break
             } else if speed > 0.7 {
                 currentDiameter = pipesStandardSizes.last
+                
                 if let d = currentDiameter {
                     pressureDrop = calcilatePressureDropPerMeterWith(diameter: d.1, speed: speed)
                 }
@@ -109,8 +113,15 @@ class HeatFloorCalculation {
         return firstLayerResistance + secondLayerResistance
     }
     
-    init(square: Double, heatLoss: Double, pipeManufacture: String, floorConstruction: String, waterTemperature: Double, distanceBetweenPipes: Double, indoorTemperature: Double) {
-        
+    init(
+        square: Double,
+        heatLoss: Double,
+        pipeManufacture: String,
+        floorConstruction: String,
+        waterTemperature: Double,
+        distanceBetweenPipes: Double,
+        indoorTemperature: Double
+    ) {
         let pipe = calculatePipeDiameterWith(manufacture: pipeManufacture, heatLoss: heatLoss)
         let diameterPrefix = pipe.0 * 1000
         let diameterSuffix = (pipe.0 - pipe.1) * 1000 / 2
@@ -145,21 +156,23 @@ class HeatFloorCalculation {
         heatFlow = currentAboveQ * square
         pipeLength = square / distanceBetweenPipes
         
-        print("1)averageWaterTemperature: \(averageWaterTemperature)\n" +
-                "2)thermalResistanceAbovePipes: \(thermalResistanceAbovePipes)\n" +
-                "3)thermalResistanceBelowPipes: \(thermalResistanceBelowPipes)\n" +
-                "4)waterTefloorSurfaceAndThermalResistanceAngle: \(floorSurfaceAndThermalResistanceAngle)\n" +
-                "5)maxThermalResistance: \(maxThermalResistance)\n" +
-                "6)ratioOfHeatFluxes: \(ratioOfHeatFluxes)\n" +
-                "7)pipeWallsThеhermalResistance: \(pipeWallsThеhermalResistance)\n" +
-                "8)currentAboveQ: \(currentAboveQ)\n" +
-                "9)currentBelowQ: \(currentBelowQ)\n" +
-                "10)totalHeatFlow: \(totalHeatFlow)\n" +
-                "11)totalHeatFlowPerMeter: \(totalHeatFlowPerMeter)\n" +
-                "12)maxFloorTemperature: \(maxFloorTemperature)\n" +
-                "13)minFloorTemperature: \(minFloorTemperature)\n" +
-                "14)averidgeFloorTemperature: \(averidgeFloorTemperature)\n" +
-                "15)heatFlow: \(heatFlow!)\n" +
-                "16)pipeLength: \(pipeLength!)\n")
+        print(
+            "1) averageWaterTemperature: \(averageWaterTemperature)\n" +
+            "2) thermalResistanceAbovePipes: \(thermalResistanceAbovePipes)\n" +
+            "3) thermalResistanceBelowPipes: \(thermalResistanceBelowPipes)\n" +
+            "4) waterTefloorSurfaceAndThermalResistanceAngle: \(floorSurfaceAndThermalResistanceAngle)\n" +
+            "5) maxThermalResistance: \(maxThermalResistance)\n" +
+            "6) ratioOfHeatFluxes: \(ratioOfHeatFluxes)\n" +
+            "7) pipeWallsThеhermalResistance: \(pipeWallsThеhermalResistance)\n" +
+            "8) currentAboveQ: \(currentAboveQ)\n" +
+            "9) currentBelowQ: \(currentBelowQ)\n" +
+            "10) totalHeatFlow: \(totalHeatFlow)\n" +
+            "11) totalHeatFlowPerMeter: \(totalHeatFlowPerMeter)\n" +
+            "12) maxFloorTemperature: \(maxFloorTemperature)\n" +
+            "13) minFloorTemperature: \(minFloorTemperature)\n" +
+            "14) averidgeFloorTemperature: \(averidgeFloorTemperature)\n" +
+            "15) heatFlow: \(heatFlow!)\n" +
+            "16) pipeLength: \(pipeLength!)\n"
+        )
     }
 }

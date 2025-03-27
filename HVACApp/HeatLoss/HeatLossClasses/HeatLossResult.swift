@@ -29,24 +29,28 @@ class HeatLossResult {
     
     private func additionalHeatLoss(orientation: String) -> Double {
         switch orientation {
-            case "с", "в", "св", "сз": return 1.1
-            case "юв", "з": return 1.05
-            default: return 1
+        case "с", "в", "св", "сз": return 1.1
+        case "юв", "з": return 1.05
+        default: return 1
         }
     }
     
     private func constructionResistance(name: String) -> Double {
         switch name {
-            case "Стена": return wallResistance
-            case "Окно": return windowResistance
-            case "Дверь": return windowResistance
-            case "Пол": return flourResistance
-            case "Покрытие": return ceilingResistance
-            default: return 0
+        case "Стена": return wallResistance
+        case "Окно": return windowResistance
+        case "Дверь": return windowResistance
+        case "Пол": return flourResistance
+        case "Покрытие": return ceilingResistance
+        default: return 0
         }
     }
     
-    func calculateConstructionWith(name: String, square: Double, orientation: String) -> Construction {
+    func calculateConstructionWith(
+        name: String,
+        square: Double,
+        orientation: String
+    ) -> Construction {
         let additionalHeaLoss = additionalHeatLoss(orientation: orientation)
         let constructionResistance = self.constructionResistance(name: name)
         let heatLoss = square * additionalHeaLoss * (indoorTemperature - outdoorTemperature) / constructionResistance
@@ -69,12 +73,14 @@ class HeatLossResult {
         constructionArray = newArray
     }
     
-    init(indoorTemperature: Double,
-         outdoorTemperature: Double,
-         wallResistance: Double,
-         windowResistance: Double,
-         ceilingResistance: Double,
-         flourResistance: Double) {
+    init(
+        indoorTemperature: Double,
+        outdoorTemperature: Double,
+        wallResistance: Double,
+        windowResistance: Double,
+        ceilingResistance: Double,
+        flourResistance: Double
+    ) {
         self.indoorTemperature = indoorTemperature
         self.outdoorTemperature = outdoorTemperature
         self.wallResistance = wallResistance

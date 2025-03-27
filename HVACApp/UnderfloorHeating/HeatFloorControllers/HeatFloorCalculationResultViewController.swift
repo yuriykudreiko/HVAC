@@ -149,11 +149,13 @@ class HeatFloorCalculationResultViewController: UIViewController, HeatFloorCalcu
     }
     
     // MARK: - Actions
+    
     @objc func backAction() {
         dismiss(animated: true)
     }
     
     // MARK: - HeatFloorCalculationViewControllerDelegate
+    
     func addHeatFloorCalculationWith(
         square: Double,
         heatLoss: Double,
@@ -163,7 +165,6 @@ class HeatFloorCalculationResultViewController: UIViewController, HeatFloorCalcu
         distanceBetweenPipes: Double,
         indoorTemperature: Double
     ) {
-        
         print(
             "square: \(square)\n" +
             "heatLoss: \(heatLoss)\n" +

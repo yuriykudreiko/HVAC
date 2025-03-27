@@ -9,27 +9,33 @@
 import UIKit
 
 class HeatLossTableViewController: UITableViewController, HeatLossCalculationViewControllerDelegate {
+    
     // MARK: - Properties
+    
     var myVC: HeatLossCalculationViewController?
     var heatLossArray: [HeatLossResult] = []
     var rememberingNumberOfRow: Int?
     
     // MARK: - ViewController lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
-                                                                 target: self,
-                                                                 action: #selector(addLayerAction(sander:)))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addLayerAction(sander:))
+        )
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         tableView.reloadData()
     }
-
+    
     // MARK: - Actions
+    
     @objc private func addLayerAction(sander: UIBarButtonItem) {
         let vc = HeatLossCalculationViewController()
         vc.delegate = self
@@ -37,12 +43,13 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
-
+    
     // MARK: - UITableViewDataSource
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return heatLossArray.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "HeatLossCell"
         let cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
@@ -62,6 +69,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     }
     
     // MARK: - UITableViewDelegate
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         rememberingNumberOfRow = indexPath.row
@@ -74,6 +82,7 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
     }
     
     // MARK: - AddNewConstructionViewControllerDelegate
+    
     func addHeatLossCalculationWith(result: HeatLossResult, overwrite: Bool) {
         if overwrite {
             if let index = rememberingNumberOfRow {
@@ -83,4 +92,5 @@ class HeatLossTableViewController: UITableViewController, HeatLossCalculationVie
             heatLossArray.append(result)
         }
     }
+    
 }

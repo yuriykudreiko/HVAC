@@ -30,7 +30,9 @@ protocol AddNewConstructionViewControllerDelegate {
 }
 
 class AddNewConstructionViewController: UIViewController {
+    
     // MARK: - Properties
+    
     var delegate: AddNewConstructionViewControllerDelegate?
     var currentConstruction: Construction?
     var overwrite: Bool = false
@@ -39,6 +41,7 @@ class AddNewConstructionViewController: UIViewController {
                                            ["Стена", "Окно", "Дверь", "Пол", "Покрытие"]]
     
     // MARK: - Items
+    
     private let orientationAndNamePickerView: UIPickerView = {
         let typePickerView = UIPickerView()
         typePickerView.backgroundColor = .white
@@ -129,14 +132,12 @@ class AddNewConstructionViewController: UIViewController {
     }
     
     private func createStackLine() -> [UIStackView] {
-        
         let firstLine = createStackViewWith(subviews: [squareLabel, squareTextField])
         let secondLine = createStackViewWith(subviews: [orientationLabel, nameLabel])
         return [firstLine, secondLine]
     }
     
     private func layoutSetup() {
-        
         let myStackView = UIStackView(arrangedSubviews: createStackLine())
         view.addSubview(myStackView)
         myStackView.axis = .vertical
@@ -169,6 +170,7 @@ class AddNewConstructionViewController: UIViewController {
     }
     
     // MARK: - Alert
+    
     private func createSaveAlert() {
         let alertVC = UIAlertController(title: "Введите корректное значение(число) в поле <<Площадь>>", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -177,6 +179,7 @@ class AddNewConstructionViewController: UIViewController {
     }
     
     // MARK: - Actions
+    
     @objc private func cancelButtonAction(sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
@@ -195,10 +198,13 @@ class AddNewConstructionViewController: UIViewController {
             createSaveAlert()
         }
     }
+    
 }
 
 // MARK: - UIPickerViewDataSource
+
 extension AddNewConstructionViewController: UIPickerViewDataSource {
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return orientationAndNameArray.count
     }
@@ -208,7 +214,9 @@ extension AddNewConstructionViewController: UIPickerViewDataSource {
     }
     
     // MARK: - UIPickerViewDelegate
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return orientationAndNameArray[component][row]
     }
+    
 }

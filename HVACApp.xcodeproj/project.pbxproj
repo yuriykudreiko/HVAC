@@ -24,6 +24,8 @@
 		1FCF92CA205AE77500179C9E /* HeatLossCalculationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C9205AE77500179C9E /* HeatLossCalculationViewController.swift */; };
 		1FDF37D4204EF65A00668AD6 /* EngeniringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */; };
 		1FDF37D6204F0DDE00668AD6 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDF37D5204F0DDE00668AD6 /* Material.swift */; };
+		3F6866B62D951E1600123E1C /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6866B52D951E1000123E1C /* UIViewController+Extensions.swift */; };
+		3F6866B82D951E3600123E1C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6866B72D951E3100123E1C /* UIColor+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		1FCF92C9205AE77500179C9E /* HeatLossCalculationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossCalculationViewController.swift; sourceTree = "<group>"; };
 		1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngeniringViewController.swift; sourceTree = "<group>"; };
 		1FDF37D5204F0DDE00668AD6 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+		3F6866B52D951E1000123E1C /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		3F6866B72D951E3100123E1C /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +145,7 @@
 		1FC91CBD20417CEF007B9680 /* HVACApp */ = {
 			isa = PBXGroup;
 			children = (
+				3F6866B42D951E0200123E1C /* Extensions */,
 				1FC91CBE20417CEF007B9680 /* AppDelegate.swift */,
 				1FC91CC520417CEF007B9680 /* Assets.xcassets */,
 				1FC91CC720417CEF007B9680 /* LaunchScreen.storyboard */,
@@ -170,6 +175,15 @@
 				1FCF92C5205ADC9E00179C9E /* Construction.swift */,
 			);
 			path = HeatLossClasses;
+			sourceTree = "<group>";
+		};
+		3F6866B42D951E0200123E1C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3F6866B72D951E3100123E1C /* UIColor+Extensions.swift */,
+				3F6866B52D951E1000123E1C /* UIViewController+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,8 +270,10 @@
 				1FC91CD520417ED9007B9680 /* HeatEngeniringTableViewController.swift in Sources */,
 				1FDF37D4204EF65A00668AD6 /* EngeniringViewController.swift in Sources */,
 				1F3F654D213DD1B400446C27 /* HeatFloorCalculation.swift in Sources */,
+				3F6866B62D951E1600123E1C /* UIViewController+Extensions.swift in Sources */,
 				1F125BA2213C141500A4F59C /* HeatFloorCalculationViewController.swift in Sources */,
 				1FC91CD720417F09007B9680 /* HeatLossTableViewController.swift in Sources */,
+				3F6866B82D951E3600123E1C /* UIColor+Extensions.swift in Sources */,
 				1FC86FFC204FF0BA003C25C6 /* EngeniringResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

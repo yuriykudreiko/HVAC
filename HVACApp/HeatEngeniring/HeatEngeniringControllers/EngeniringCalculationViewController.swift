@@ -8,67 +8,14 @@
 
 import UIKit
 
-extension UIColor {
-    static var mainPink = UIColor(red: 232/255, green: 68/255, blue: 133/255, alpha: 1)
-    static var turquoise = UIColor(red: 48/255, green: 214/255, blue: 200/255, alpha: 1)//(48,214,200)
-    static var aquamarine = UIColor(red: 121/255, green: 248/255, blue: 248/255, alpha: 1)//(121,248,248)
-    static var lightGreen = UIColor(red: 80/255, green: 255/255, blue: 0/255, alpha: 1)//(80,255,0)
-}
-
-extension UIViewController {
-    static let myFont: UIFont = UIFont.systemFont(ofSize: 14)
-    
-    static func createTextFieldWith(text: String,
-                                    placeholder: String,
-                                    keyboardType: UIKeyboardType,
-                                    returnKey: UIReturnKeyType) -> UITextField {
-        let textField = UITextField()
-        textField.text = text
-        textField.placeholder = placeholder
-        textField.font = myFont
-        textField.borderStyle = .roundedRect
-        textField.autocorrectionType = .no
-        textField.keyboardType = keyboardType
-        textField.returnKeyType = .next
-        textField.clearButtonMode = .whileEditing
-        textField.contentVerticalAlignment = .center
-        textField.contentHorizontalAlignment = .center
-        
-        return textField
-    }
-    
-    static func createLabelWith(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = myFont
-        label.textAlignment = .center
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 8
-        label.backgroundColor = .lightGray
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 0
-        
-        return label
-    }
-}
-
 protocol EngeniringCalculationViewControllerDelegate {
     func addCalculation(result: EngeniringResult, overwrite: Bool)
 }
 
 class EngeniringCalculationViewController: UIViewController {
-    static private func createButton(text: String, color: UIColor) -> UIButton {
-        let buttom = UIButton(type: .system)
-        buttom.setTitle(text, for: .normal)
-        buttom.backgroundColor = color
-        buttom.layer.cornerRadius = 10
-        buttom.titleLabel?.font = myFont
-        buttom.setTitleColor(.gray, for: .normal)
-        
-        return buttom
-    }
     
     // MARK: - Properties
+    
     var delegate: EngeniringCalculationViewControllerDelegate?
     private var name: String?
     private var calculationArray: [Material] = []
@@ -78,6 +25,7 @@ class EngeniringCalculationViewController: UIViewController {
     var overwriteMainResult: Bool?
     
     // MARK: - Items
+    
     let calculationButton: UIButton = {
         let button = createButton(text: "Расчет", color: .turquoise)
         return button
@@ -96,23 +44,46 @@ class EngeniringCalculationViewController: UIViewController {
     }()
     
     let normalizedWallResistanceTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "3.2", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "3.2",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
+        
         return sampleTextField
     }()
     
     let kindOfMaterialTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .default, returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "",
+            placeholder: "",
+            keyboardType: .default,
+            returnKey: .next
+        )
+        
         return sampleTextField
     }()
     
     let widthTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
+        
         sampleTextField.isEnabled = false
         return sampleTextField
     }()
     
     let thermalConductivityTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", placeholder: "", keyboardType: .numbersAndPunctuation, returnKey: .done)
+        let sampleTextField = createTextFieldWith(
+            text: "",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .done
+        )
         return sampleTextField
     }()
     
@@ -137,12 +108,13 @@ class EngeniringCalculationViewController: UIViewController {
     }()
     
     // MARK: - ViewController lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         calculationButton.addTarget(self, action: #selector(calculationAction(sender:)), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveAction(sender:)), for: .touchUpInside)
-
+        
         calculationArray = calculationResult?.materialArray ?? []
         
         view.backgroundColor = .white
@@ -180,6 +152,7 @@ class EngeniringCalculationViewController: UIViewController {
             let insulationWidth = Double(round(1000 * width)/1000)
             widthTextField.text = String(insulationWidth)
         }
+        
         tableView.delegate = self
         tableView.dataSource = self
         layoutSetup()
@@ -192,6 +165,7 @@ class EngeniringCalculationViewController: UIViewController {
     }
     
     // MARK: - Layout
+    
     private func createStackViewWith(subviews: [UIView]) -> UIStackView {
         let line = UIStackView(arrangedSubviews: subviews)
         line.distribution = .fillEqually
@@ -246,6 +220,7 @@ class EngeniringCalculationViewController: UIViewController {
     }
     
     // MARK: - Actions
+    
     @objc private func calculationAction(sender: UIButton) {
         let calculationName = name!
         let materialName = kindOfMaterialTextField.text!
@@ -283,6 +258,7 @@ class EngeniringCalculationViewController: UIViewController {
     }
     
     // MARK: - Alerts
+    
     private func createCalculationNameAlert() {
         let alertVC = UIAlertController(title: "Введите имя рассчета", message: nil, preferredStyle: .alert)
         
@@ -312,10 +288,13 @@ class EngeniringCalculationViewController: UIViewController {
         alertVC.addAction(submitAction)
         present(alertVC, animated: true)
     }
+    
 }
 
 // MARK: - UITableViewDataSource
+
 extension EngeniringCalculationViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return calculationArray.count
     }
@@ -338,10 +317,13 @@ extension EngeniringCalculationViewController: UITableViewDataSource {
         
         return cell
     }
+    
 }
 
 // MARK: - UITableViewDelegate
+
 extension EngeniringCalculationViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         numberOfElement = indexPath.row
@@ -352,10 +334,13 @@ extension EngeniringCalculationViewController: UITableViewDelegate {
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
+    
 }
 
 // MARK: - EngeniringViewControllerDelegate
+
 extension EngeniringCalculationViewController: EngeniringViewControllerDelegate {
+    
     func addLayerInformation(layer: Material, overwrite: Bool) {
         if overwrite == true {
             calculationArray[numberOfElement!] = layer
@@ -363,4 +348,5 @@ extension EngeniringCalculationViewController: EngeniringViewControllerDelegate 
             calculationArray.append(layer)
         }
     }
+    
 }

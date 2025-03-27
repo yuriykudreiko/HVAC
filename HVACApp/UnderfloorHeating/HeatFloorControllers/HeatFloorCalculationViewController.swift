@@ -9,7 +9,15 @@
 import UIKit
 
 protocol HeatFloorCalculationViewControllerDelegate {
-    func addHeatFloorCalculationWith(square: Double, heatLoss: Double, pipeManufacturer: String, floorConstruction: String, waterTemperature: Double, distanceBetweenPipes: Double, indoorTemperature: Double)
+    func addHeatFloorCalculationWith(
+        square: Double,
+        heatLoss: Double,
+        pipeManufacturer: String,
+        floorConstruction: String,
+        waterTemperature: Double,
+        distanceBetweenPipes: Double,
+        indoorTemperature: Double
+    )
 }
 
 class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -60,12 +68,22 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     }()
     
     private let squareTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", placeholder: "Площадь, м²", keyboardType: .default, returnKey: .done)
+        let sampleTextField = createTextFieldWith(
+            text: "",
+            placeholder: "Площадь, м²",
+            keyboardType: .default,
+            returnKey: .done
+        )
         return sampleTextField
     }()
     
     private let heatLossTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "", placeholder: "Теплопотери, Вт", keyboardType: .default, returnKey: .done)
+        let sampleTextField = createTextFieldWith(
+            text: "",
+            placeholder: "Теплопотери, Вт",
+            keyboardType: .default,
+            returnKey: .done
+        )
         return sampleTextField
     }()
     
@@ -197,7 +215,6 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     // MARK: - Alert
     
     private func createCalculationAlert() {
-        
         let alertVC = UIAlertController(title: "Заполните правильно все поля в текущем окне", message: nil, preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
@@ -220,15 +237,18 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
             let vc = HeatFloorCalculationResultViewController()
             delegate = vc
             let navVC = UINavigationController(rootViewController: vc)
-            delegate?.addHeatFloorCalculationWith(square: square,
-                                                  heatLoss: heatLoss,
-                                                  pipeManufacturer: pipeManufacturer,
-                                                  floorConstruction: floorConstruction,
-                                                  waterTemperature: waterTemperature,
-                                                  distanceBetweenPipes: distanceBetweenPipes,
-                                                  indoorTemperature: indoorTemperature)
-            present(navVC, animated: true)
             
+            delegate?.addHeatFloorCalculationWith(
+                square: square,
+                heatLoss: heatLoss,
+                pipeManufacturer: pipeManufacturer,
+                floorConstruction: floorConstruction,
+                waterTemperature: waterTemperature,
+                distanceBetweenPipes: distanceBetweenPipes,
+                indoorTemperature: indoorTemperature
+            )
+            
+            present(navVC, animated: true)
         } else {
             createCalculationAlert()
         }
@@ -238,12 +258,15 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
     
     func saveDefaults() {
         let defaults = UserDefaults.standard
+        
         if let square = squareTextField.text {
             defaults.set(square, forKey: "floorSquare")
         }
+        
         if let heatLoss = heatLossTextField.text {
             defaults.set(heatLoss, forKey: "heatLoss")
         }
+        
         defaults.set(pipeManufacturerPickerView.selectedRow(inComponent: 0), forKey: "pipeManufactureIndex")
         defaults.set(floorConstructionPickerView.selectedRow(inComponent: 0), forKey: "floorConstructionIndex")
         defaults.set(temperaturePickerView.selectedRow(inComponent: 0), forKey: "waterTemperatureIndex")
@@ -297,6 +320,7 @@ class HeatFloorCalculationViewController: UIViewController, UIPickerViewDelegate
             return indoorTemperatureArray[row]
         }
     }
+    
 }
 
 

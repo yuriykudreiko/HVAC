@@ -11,20 +11,25 @@ import UIKit
 class HeatEngeniringTableViewController: UITableViewController {
     
     // MARK: - Properties
+    
     var engeniringArray: [EngeniringResult] = []
     var rememberingNumberOfRow: Int?
     
     // MARK: - ViewController lifecycle
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        dispatchPrecondition(condition: .onQueue(.global()))
+        //        dispatchPrecondition(condition: .onQueue(.global()))
         tableView.reloadData()
     }
+    
 }
 
 // MARK: - UITableViewDataSource
+
 extension HeatEngeniringTableViewController {
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return engeniringArray.count
     }
@@ -40,10 +45,13 @@ extension HeatEngeniringTableViewController {
         
         return cell
     }
+    
 }
 
 // MARK: - UITableViewDelegate
+
 extension HeatEngeniringTableViewController {
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         rememberingNumberOfRow = indexPath.row
@@ -56,10 +64,13 @@ extension HeatEngeniringTableViewController {
         let navVC = UINavigationController(rootViewController: viewController)
         present(navVC, animated: true)
     }
+    
 }
 
 //MARK: - EngeniringCalculationViewControllerDelegate
+
 extension HeatEngeniringTableViewController: EngeniringCalculationViewControllerDelegate {
+    
     func addCalculation(result: EngeniringResult, overwrite: Bool) {
         if overwrite {
             engeniringArray[rememberingNumberOfRow!] = result
@@ -67,4 +78,5 @@ extension HeatEngeniringTableViewController: EngeniringCalculationViewController
             engeniringArray.append(result)
         }
     }
+    
 }

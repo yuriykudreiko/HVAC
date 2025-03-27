@@ -13,24 +13,16 @@ protocol HeatLossCalculationViewControllerDelegate {
 }
 
 class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AddNewConstructionViewControllerDelegate {
-    static private func createButton(text: String, color: UIColor) -> UIButton {
-        let buttom = UIButton(type: .system)
-        buttom.setTitle(text, for: .normal)
-        buttom.backgroundColor = color
-        buttom.layer.cornerRadius = 10
-        buttom.titleLabel?.font = myFont
-        buttom.setTitleColor(.gray, for: .normal)
-        buttom.translatesAutoresizingMaskIntoConstraints = false
-        return buttom
-    }
     
     // MARK: - Properties
+    
     var delegate: HeatLossCalculationViewControllerDelegate?
     var calculationResult: HeatLossResult?
     private var rememberNumberOfElement: Int?
     var overwriteHeatLossResult: Bool = false
     
     // MARK: - Items
+    
     let calculateButton: UIButton = {
         let button = createButton(text: "Пересчитать", color: .turquoise)
         return button
@@ -50,50 +42,62 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     }()
     
     private let outdoorTemperatureTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "-24",
-                                                  placeholder: "",
-                                                  keyboardType: .numbersAndPunctuation,
-                                                  returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "-24",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
         return sampleTextField
     }()
     
     private let indoorTemperatureTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "18",
-                                                  placeholder: "",
-                                                  keyboardType: .numbersAndPunctuation,
-                                                  returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "18",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
         return sampleTextField
     }()
     
     private let wallResistanceTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "3.2",
-                                                  placeholder: "",
-                                                  keyboardType: .numbersAndPunctuation,
-                                                  returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "3.2",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
         return sampleTextField
     }()
     
     private let windowResistanceTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "1",
-                                                  placeholder: "",
-                                                  keyboardType: .numbersAndPunctuation,
-                                                  returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "1",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
         return sampleTextField
     }()
     
     private let ceilingResistanceTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "6",
-                                                  placeholder: "",
-                                                  keyboardType: .numbersAndPunctuation,
-                                                  returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "6",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
         return sampleTextField
     }()
     
     private let flourResistanceTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(text: "2.5",
-                                                  placeholder: "",
-                                                  keyboardType: .numbersAndPunctuation,
-                                                  returnKey: .next)
+        let sampleTextField = createTextFieldWith(
+            text: "2.5",
+            placeholder: "",
+            keyboardType: .numbersAndPunctuation,
+            returnKey: .next
+        )
         return sampleTextField
     }()
     
@@ -139,7 +143,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
         
         calculateButton.addTarget(self, action: #selector(calculationWhenValueChangegAction(sender:)), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveAction(sender:)), for: .touchUpInside)
-
+        
         if calculationResult == nil {
             createAlert()
             let outTemp = Double(outdoorTemperatureTextField.text!)!
@@ -149,7 +153,14 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
             let ceilingRes = Double(ceilingResistanceTextField.text!)!
             let flourRes = Double(flourResistanceTextField.text!)!
             
-            calculationResult = HeatLossResult(indoorTemperature: indTemp, outdoorTemperature: outTemp, wallResistance: wallRes, windowResistance: windowRes, ceilingResistance: ceilingRes, flourResistance: flourRes)
+            calculationResult = HeatLossResult(
+                indoorTemperature: indTemp,
+                outdoorTemperature: outTemp,
+                wallResistance: wallRes,
+                windowResistance: windowRes,
+                ceilingResistance: ceilingRes,
+                flourResistance: flourRes
+            )
         } else {
             if let name = calculationResult?.calculationName {
                 navigationItem.title = name
@@ -181,12 +192,16 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
         }
         
         view.backgroundColor = .white
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                                                target: self,
-                                                                action: #selector(cancelButtonAction(sender:)))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
-                                                                 target: self,
-                                                                 action: #selector(addConstructionAction(sander:)))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .cancel,
+            target: self,
+            action: #selector(cancelButtonAction(sender:))
+        )
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addConstructionAction(sander:))
+        )
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -243,6 +258,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     }
     
     // MARK: - Actions
+    
     @objc private func calculationWhenValueChangegAction(sender: UITextField) {
         if let outTemp = Double(outdoorTemperatureTextField.text!),
            let indTemp = Double(indoorTemperatureTextField.text!),
@@ -285,6 +301,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     }
     
     // MARK: - Alert
+    
     private func createAlert() {
         let alertVC = UIAlertController(title: "Введите имя рассчета", message: nil, preferredStyle: .alert)
         
@@ -357,6 +374,7 @@ class HeatLossCalculationViewController: UIViewController, UITableViewDelegate, 
     }
     
     // MARK: - AddNewConstructionViewControllerDelegate
+    
     func addNewConstructionWith(name: String, orientation: String, square: Double, overwrite: Bool) {
         if overwrite {
             if let index = rememberNumberOfElement {
