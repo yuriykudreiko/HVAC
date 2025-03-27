@@ -95,7 +95,7 @@ private extension TabBarViewController {
 extension TabBarViewController: UITabBarControllerDelegate {
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let index = tabBar.items?.firstIndex(of: item),
-              let type = ScreenType(rawValue: indexOfTabBarItem) else { return }
+              let type = ScreenType(rawValue: index) else { return }
         
         indexOfTabBarItem = index
         
