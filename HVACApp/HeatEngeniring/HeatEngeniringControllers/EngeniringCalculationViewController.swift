@@ -23,7 +23,7 @@ class EngeniringCalculationViewController: UIViewController {
     var overwriteMainResult: Bool?
     
     private var name: String?
-    private var calculationArray: [Material] = []
+    private var materialArray: [Material] = []
     private var thermalInsulationMaterial: Material?
     
     // MARK: - Items
@@ -121,7 +121,7 @@ class EngeniringCalculationViewController: UIViewController {
             for: .touchUpInside
         )
         
-        calculationArray = calculationResult?.materialArray ?? []
+        materialArray = calculationResult?.materialArray ?? []
         
         view.backgroundColor = .white
         if overwriteMainResult == false {
@@ -252,7 +252,7 @@ class EngeniringCalculationViewController: UIViewController {
             calculationName: calculationName,
             thermalInsulationName: materialName,
             normalizedWallResistance: normalizedWallResistance,
-            materialArray: calculationArray,
+            materialArray: materialArray,
             thermalInsulationConductivity: thermalConductivity
         )
         let insulationWidth = Double(round(1000 * calculationResult.insulationMaterial.width) / 1000)
@@ -277,7 +277,7 @@ class EngeniringCalculationViewController: UIViewController {
     @objc private func addLayerAction(sander: UIBarButtonItem) {
         let vc = EngeniringViewController()
         vc.delegate = self
-        vc.needToOverwrite = false
+        vc.updateExistingElement = false
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
@@ -321,7 +321,7 @@ class EngeniringCalculationViewController: UIViewController {
 extension EngeniringCalculationViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return calculationArray.count
+        return materialArray.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -329,13 +329,13 @@ extension EngeniringCalculationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return "Слоев: \(calculationArray.count)"
+        return "Слоев: \(materialArray.count)"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = "materialIdentifier"
         let cell = UITableViewCell(style: .value1, reuseIdentifier: identifier)
-        let mat = calculationArray[indexPath.row]
+        let mat = materialArray[indexPath.row]
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.text = mat.name
         cell.detailTextLabel?.text = "\(mat.width)"
@@ -352,12 +352,12 @@ extension EngeniringCalculationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         numberOfElement = indexPath.row
-        let vc = EngeniringViewController()
-        vc.delegate = self
-        vc.material = calculationArray[indexPath.row]
-        vc.needToOverwrite = true
-        let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true)
+        let viewController = EngeniringViewController()
+        viewController.delegate = self
+        viewController.preselectedMaterial = materialArray[indexPath.row]
+        viewController.updateExistingElement = true
+        let navigationController = UINavigationController(rootViewController: viewController)
+        present(navigationController, animated: true)
     }
     
 }
@@ -366,11 +366,16 @@ extension EngeniringCalculationViewController: UITableViewDelegate {
 
 extension EngeniringCalculationViewController: EngeniringViewControllerDelegate {
     
-    func addLayerInformation(layer: Material, overwrite: Bool) {
-        if overwrite == true {
-            calculationArray[numberOfElement!] = layer
-        } else {
-            calculationArray.append(layer)
+    func add(material: Material, updateExistingElement: Bool) {
+        tableView.performBatchUpdates {
+            if updateExistingElement == true, let row = numberOfElement {
+                materialArray[row] = material
+                tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
+            } else {
+                materialArray.append(material)
+                tableView.insertRows(at: [IndexPath(row: materialArray.count - 1, section: 0)], with: .automatic)
+                tableView.footerView(forSection: 0)?.textLabel?.text = "Слоев: \(materialArray.count)"
+            }
         }
     }
     

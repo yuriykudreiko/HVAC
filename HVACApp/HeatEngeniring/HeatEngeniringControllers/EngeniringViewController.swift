@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EngeniringViewControllerDelegate {
-    func addLayerInformation(layer: Material, overwrite: Bool)
+    func add(material: Material, updateExistingElement: Bool)
 }
 
 class EngeniringViewController: UIViewController {
@@ -17,60 +17,48 @@ class EngeniringViewController: UIViewController {
     // MARK: - Properties
     
     var delegate: EngeniringViewControllerDelegate?
-    var material: Material?
-    var needToOverwrite: Bool?
+    var preselectedMaterial: Material?
+    var updateExistingElement = false
     
     // MARK: - Items
     
     private let kindOfMaterialTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(
+        return createTextFieldWith(
             text: "",
             placeholder: "Материал",
             keyboardType: .default,
             returnKey: .next
         )
-        
-        return sampleTextField
     }()
     
     private let widthTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(
+        return createTextFieldWith(
             text: "",
             placeholder: "Толщина, мм",
             keyboardType: .numbersAndPunctuation,
             returnKey: .next
         )
-        
-        return sampleTextField
     }()
     
     private let thermalConductivityTextField: UITextField = {
-        let sampleTextField = createTextFieldWith(
+        return createTextFieldWith(
             text: "",
             placeholder: "Теплопроводность",
             keyboardType: .numbersAndPunctuation,
             returnKey: .done
         )
-        
-        return sampleTextField
     }()
     
     private let kindOfMaterialLabel: UILabel = {
-        let label = createLabelWith(text: "Материал")
-        
-        return label
+        return createLabelWith(text: "Материал")
     }()
     
     private let widthLabel: UILabel = {
-        let label = createLabelWith(text: "Толщина, δ м")
-        
-        return label
+        return createLabelWith(text: "Толщина, δ м")
     }()
     
     private let thermalConductivityLablel: UILabel = {
-        let label = createLabelWith(text: "Теплопроводность, λ")
-        
-        return label
+        return createLabelWith(text: "Теплопроводность, λ")
     }()
     
     private let saveButton: UIButton = {
@@ -92,16 +80,10 @@ class EngeniringViewController: UIViewController {
         
         saveButton.addTarget(self, action: #selector(saveAction), for: .touchUpInside)
         
-        if let name = material?.name {
-            kindOfMaterialTextField.text = name
-        }
-        
-        if let width = material?.width {
-            widthTextField.text = String(width)
-        }
-        
-        if let thermalConductivity = material?.thermalConductivity {
-            thermalConductivityTextField.text = String(thermalConductivity)
+        if let material = preselectedMaterial {
+            kindOfMaterialTextField.text = material.name
+            widthTextField.text = String(material.width)
+            thermalConductivityTextField.text = String(material.thermalConductivity)
         }
         
         view.backgroundColor = .white
@@ -112,7 +94,7 @@ class EngeniringViewController: UIViewController {
             action: #selector(cancelButtonAction(sender:))
         )
         
-        layoutSetup()
+        setupLayout()
     }
     
     // MARK: - Layout
@@ -133,7 +115,7 @@ class EngeniringViewController: UIViewController {
         return [firstLine, secondLine, thirdLine]
     }
     
-    private func layoutSetup() {
+    private func setupLayout() {
         let myStackView = UIStackView(arrangedSubviews: createStackLine())
         view.addSubview(myStackView)
         myStackView.axis = .vertical
@@ -165,16 +147,21 @@ class EngeniringViewController: UIViewController {
     }
     
     @objc private func saveAction(sender: UIButton) {
-        let kind = kindOfMaterialTextField.text!
-        let width = Double(widthTextField.text!)
-        let thermalConductivity = Double(thermalConductivityTextField.text!)
-        
-        if kind != "" && width != nil && thermalConductivity != nil {
-            material = Material(name: kind, width: width!, thermalConductivity: thermalConductivity!)
-            delegate?.addLayerInformation(layer: material!, overwrite: needToOverwrite!)
-            dismiss(animated: true)
-        } else {
+        guard
+            let kind = kindOfMaterialTextField.text,
+            let widthString = widthTextField.text,
+            let thermalConductivityString = thermalConductivityTextField.text,
+            let width = Double(widthString),
+            let thermalConductivity = Double(thermalConductivityString)
+        else {
             createAlert()
+            return
+        }
+        
+        let material = Material(name: kind, width: width, thermalConductivity: thermalConductivity)
+        
+        dismiss(animated: true) {
+            self.delegate?.add(material: material, updateExistingElement: self.updateExistingElement)
         }
     }
     
@@ -186,4 +173,5 @@ class EngeniringViewController: UIViewController {
         alertVC.addAction(submitAction)
         present(alertVC, animated: true)
     }
+    
 }

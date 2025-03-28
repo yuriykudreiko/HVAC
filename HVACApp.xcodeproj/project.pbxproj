@@ -24,6 +24,7 @@
 		1FCF92CA205AE77500179C9E /* HeatLossViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF92C9205AE77500179C9E /* HeatLossViewController.swift */; };
 		1FDF37D4204EF65A00668AD6 /* EngeniringViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */; };
 		1FDF37D6204F0DDE00668AD6 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDF37D5204F0DDE00668AD6 /* Material.swift */; };
+		3F4360B42D9708C000162501 /* Materials.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F4360B32D9708C000162501 /* Materials.json */; };
 		3F6866B62D951E1600123E1C /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6866B52D951E1000123E1C /* UIViewController+Extensions.swift */; };
 		3F6866B82D951E3600123E1C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6866B72D951E3100123E1C /* UIColor+Extensions.swift */; };
 /* End PBXBuildFile section */
@@ -48,6 +49,7 @@
 		1FCF92C9205AE77500179C9E /* HeatLossViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatLossViewController.swift; sourceTree = "<group>"; };
 		1FDF37D3204EF65A00668AD6 /* EngeniringViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngeniringViewController.swift; sourceTree = "<group>"; };
 		1FDF37D5204F0DDE00668AD6 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+		3F4360B32D9708C000162501 /* Materials.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Materials.json; sourceTree = "<group>"; };
 		3F6866B52D951E1000123E1C /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		3F6866B72D951E3100123E1C /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,6 +147,7 @@
 		1FC91CBD20417CEF007B9680 /* HVACApp */ = {
 			isa = PBXGroup;
 			children = (
+				3F4360B32D9708C000162501 /* Materials.json */,
 				3F6866B42D951E0200123E1C /* Extensions */,
 				1FC91CBE20417CEF007B9680 /* AppDelegate.swift */,
 				1FC91CC520417CEF007B9680 /* Assets.xcassets */,
@@ -256,6 +259,7 @@
 			files = (
 				1FC91CC920417CEF007B9680 /* LaunchScreen.storyboard in Resources */,
 				1FC91CC620417CEF007B9680 /* Assets.xcassets in Resources */,
+				3F4360B42D9708C000162501 /* Materials.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
