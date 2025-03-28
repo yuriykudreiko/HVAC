@@ -26,6 +26,12 @@ class EngeniringCalculationViewController: UIViewController {
     private var materialArray: [Material] = []
     private var thermalInsulationMaterial: Material?
     
+    private var layerCountString: String {
+        return "Слоев: \(materialArray.count)"
+    }
+    
+    private let cellIdentifier = "materialCellIdentifier"
+
     // MARK: - Items
     
     let calculationButton: UIButton = {
@@ -37,11 +43,10 @@ class EngeniringCalculationViewController: UIViewController {
     }()
     
     let tableView: UITableView = {
-        let myTableView = UITableView()
-        myTableView.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
-        myTableView.translatesAutoresizingMaskIntoConstraints = false
+        let view = UITableView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         
-        return myTableView
+        return view
     }()
     
     let normalizedWallResistanceTextField: UITextField = {
@@ -110,6 +115,8 @@ class EngeniringCalculationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+
         calculationButton.addTarget(
             self,
             action: #selector(calculationAction(sender:)),
@@ -314,6 +321,10 @@ class EngeniringCalculationViewController: UIViewController {
         present(alertVC, animated: true)
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -329,18 +340,27 @@ extension EngeniringCalculationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return "Слоев: \(materialArray.count)"
+        return layerCountString
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = "materialIdentifier"
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: identifier)
-        let mat = materialArray[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let material = materialArray[indexPath.row]
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = mat.name
-        cell.detailTextLabel?.text = "\(mat.width)"
+        cell.textLabel?.text = material.name
+        cell.detailTextLabel?.text = "\(material.width) мм"
         
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            tableView.performBatchUpdates {
+                materialArray.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                tableView.footerView(forSection: 0)?.textLabel?.text = layerCountString
+            }
+        }
     }
     
 }
@@ -374,7 +394,7 @@ extension EngeniringCalculationViewController: EngeniringViewControllerDelegate 
             } else {
                 materialArray.append(material)
                 tableView.insertRows(at: [IndexPath(row: materialArray.count - 1, section: 0)], with: .automatic)
-                tableView.footerView(forSection: 0)?.textLabel?.text = "Слоев: \(materialArray.count)"
+                tableView.footerView(forSection: 0)?.textLabel?.text = layerCountString
             }
         }
     }
