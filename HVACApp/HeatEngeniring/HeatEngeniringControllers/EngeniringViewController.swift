@@ -75,7 +75,7 @@ class EngeniringViewController: UIViewController {
     
     private let saveButton: UIButton = {
         let buttom = UIButton(type: .system)
-        buttom.setTitle("Save", for: .normal)
+        buttom.setTitle("Сохранить", for: .normal)
         buttom.backgroundColor = .red
         buttom.layer.cornerRadius = 10
         buttom.titleLabel?.font = myFont
@@ -107,7 +107,9 @@ class EngeniringViewController: UIViewController {
         view.backgroundColor = .white
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonAction(sender:))
+            barButtonSystemItem: .cancel,
+            target: self,
+            action: #selector(cancelButtonAction(sender:))
         )
         
         layoutSetup()

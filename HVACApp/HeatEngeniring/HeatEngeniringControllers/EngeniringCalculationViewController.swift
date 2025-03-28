@@ -236,18 +236,29 @@ class EngeniringCalculationViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func calculationAction(sender: UIButton) {
-        let calculationName = name!
-        let materialName = kindOfMaterialTextField.text!
-        let thermalConductivity = Double(thermalConductivityTextField.text!)
-        let normalizedWallResistance = Double(normalizedWallResistanceTextField.text!)
-        
-        if materialName != "" && thermalConductivity != nil && normalizedWallResistance != nil {
-            calculationResult = EngeniringResult(calculationName: calculationName, thermalInsulationName: materialName, normalizedWallResistance: normalizedWallResistance!, materialArray: calculationArray, thermalInsulationConductivity: thermalConductivity!)
-            let insulationWidth = Double(round(1000 * (calculationResult?.insulationMaterial.width)!) / 1000)
-            widthTextField.text = "\(insulationWidth)"
-        } else {
+        guard
+            let calculationName = name,
+            let materialName = kindOfMaterialTextField.text,
+            let thermalConductivityString = thermalConductivityTextField.text,
+            let normalizedWallResistanceString = normalizedWallResistanceTextField.text,
+            let thermalConductivity = Double(thermalConductivityString),
+            let normalizedWallResistance = Double(normalizedWallResistanceString)
+        else {
             createCalculationAlert()
+            return
         }
+        
+        let calculationResult = EngeniringResult(
+            calculationName: calculationName,
+            thermalInsulationName: materialName,
+            normalizedWallResistance: normalizedWallResistance,
+            materialArray: calculationArray,
+            thermalInsulationConductivity: thermalConductivity
+        )
+        let insulationWidth = Double(round(1000 * calculationResult.insulationMaterial.width) / 1000)
+        widthTextField.text = "\(insulationWidth)"
+        
+        self.calculationResult = calculationResult
     }
     
     @objc private func saveAction(sender: UIButton) {
@@ -282,7 +293,7 @@ class EngeniringCalculationViewController: UIViewController {
         
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: { (alertAction) in
             let textField = alertVC.textFields![0] as UITextField
-            self.name = textField.text!
+            self.name = textField.text
         })
         
         alertVC.addAction(submitAction)

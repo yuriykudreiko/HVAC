@@ -15,6 +15,8 @@ class HeatEngeniringTableViewController: UITableViewController {
     var engeniringArray: [EngeniringResult] = []
     var rememberingNumberOfRow: Int?
     
+    private let cellIdentifier = "heatEngeniringCell"
+
     // MARK: - ViewController lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +35,7 @@ class HeatEngeniringTableViewController: UITableViewController {
         
         //        dispatchPrecondition(condition: .onQueue(.global()))
         tableView.reloadData()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
     // MARK: - Actions
@@ -56,8 +59,7 @@ extension HeatEngeniringTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellIdentifier = "heatEngeniringCell"
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: cellIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         let result = engeniringArray[indexPath.row]
         cell.textLabel?.text = result.nameOfCalculation
         let insulationWidth = Double(round(1000 * result.insulationMaterial.width) / 1000)
@@ -82,8 +84,8 @@ extension HeatEngeniringTableViewController {
         viewController.calculationResult = engeniringArray[indexPath.row]
         viewController.overwriteMainResult = true
         viewController.delegate = self
-        let navVC = UINavigationController(rootViewController: viewController)
-        present(navVC, animated: true)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        present(navigationController, animated: true)
     }
     
 }
