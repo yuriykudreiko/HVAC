@@ -6,7 +6,7 @@
 //  Copyright © 2018 Yury Kudreika. All rights reserved.
 //
 
-import UIKit
+import SwiftUI
 
 protocol EngeniringCalculationViewControllerDelegate {
     func addCalculation(result: EngeniringResult, overwrite: Bool)
@@ -282,11 +282,18 @@ class EngeniringCalculationViewController: UIViewController {
     }
     
     @objc private func addLayerAction(sander: UIBarButtonItem) {
-        let vc = EngeniringViewController()
-        vc.delegate = self
-        vc.updateExistingElement = false
-        let navVC = UINavigationController(rootViewController: vc)
-        present(navVC, animated: true)
+//        let vc = EngeniringViewController()
+//        vc.delegate = self
+//        vc.updateExistingElement = false
+//        let navVC = UINavigationController(rootViewController: vc)
+//        present(navVC, animated: true)
+        
+        let viewModel = MaterialsViewModel()
+        let view = MaterialsView(viewModel: viewModel)
+        let viewController = UIHostingController(rootView: view)
+//        viewController.modalPresentationStyle = .overFullScreen
+        
+        present(viewController, animated: true)
     }
     
     // MARK: - Alerts
