@@ -7,13 +7,30 @@
 //
 
 import SwiftUI
+import Combine
 
 class MaterialsViewModel: ObservableObject {
     
-    @Published var sections: [MaterialSectionModel] = []
-    @Published var expandedSections: Set<String> = []
-    @Published var searchText: String = ""
+    var onMaterialSelect: ((_ material: MaterialModel, _ width: Double) -> Void)?
 
+    // MARK: - Properties
+
+    @Published var sections: [MaterialSectionModel] = []
+    @Published var selectedMaterial: MaterialModel?
+
+    @Published var searchText: String = ""
+    @Published var materialWidth: String = ""
+    
+    @Published var isScreenShown = true
+    @Published var shouldShowError = false
+    @Published var shouldScrollToSelectedMaterial = false
+
+    @AppStorage("recentMaterials") private var recentMaterials: String = ""
+
+    private var cancellableSet: Set<AnyCancellable> = []
+    
+    // MARK: - Initialization
+    
     init() {
         do {
             let url = Bundle.main.url(forResource: "Materials", withExtension: "json")!
@@ -21,26 +38,56 @@ class MaterialsViewModel: ObservableObject {
             let decoder = JSONDecoder()
             let sections = try decoder.decode([MaterialSectionModel].self, from: materialsData)
 
-            self.expandedSections = Set(sections.map { $0.id })
             self.sections = sections
         } catch {
             print(error)
         }
+        
+        let userDefaults = UserDefaults.standard
+        //        let defaultValue: [String: String] = [:]
+        _recentMaterials = AppStorage(wrappedValue: "value", "recentMaterials", store: userDefaults)
+        
+        bind()
     }
     
-    func bindExpandedSections(sectionModel: MaterialSectionModel) -> Binding<Bool> {
-        return Binding<Bool> (
-            get: {
-                return self.expandedSections.contains(sectionModel.id)
-            },
-            set: { isExpanding in
-                if isExpanding {
-                    self.expandedSections.insert(sectionModel.id)
-                } else {
-                    self.expandedSections.remove(sectionModel.id)
-                }
+    // MARK: - Bindings
+    
+    func bind() {
+        $materialWidth
+            .sink { [weak self] _ in
+                self?.shouldShowError = false
             }
-        )
+            .store(in: &cancellableSet)
+    }
+
+    // MARK: - Actions
+    
+    func select(material: MaterialModel) {
+        // FIXME: - add recent materials logic
+        if selectedMaterial == material {
+            selectedMaterial = nil
+        } else {
+            selectedMaterial = material
+        }
+        
+        shouldShowError = false
+    }
+    
+    func addButtonWasTapped() {
+        guard
+            let selectedMaterial = selectedMaterial,
+            let width = Double(materialWidth)
+        else {
+            shouldShowError = true
+            return
+        }
+        
+        onMaterialSelect?(selectedMaterial, width)
+        isScreenShown = false
+    }
+    
+    func close() {
+        isScreenShown = false
     }
     
 }

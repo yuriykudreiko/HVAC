@@ -289,9 +289,15 @@ class EngeniringCalculationViewController: UIViewController {
 //        present(navVC, animated: true)
         
         let viewModel = MaterialsViewModel()
+        
+        viewModel.onMaterialSelect = { [weak self] (materialModel, width) in
+            let material = Material(name: materialModel.name, width: width, thermalConductivity: materialModel.thermalConductivity.b)
+            self?.add(material: material, updateExistingElement: false)
+        }
+        
         let view = MaterialsView(viewModel: viewModel)
         let viewController = UIHostingController(rootView: view)
-//        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalPresentationStyle = .overFullScreen
         
         present(viewController, animated: true)
     }
@@ -301,14 +307,14 @@ class EngeniringCalculationViewController: UIViewController {
     private func createCalculationNameAlert() {
         let alertVC = UIAlertController(title: "Введите имя рассчета", message: nil, preferredStyle: .alert)
         
-        alertVC.addTextField(configurationHandler: { (textField) in
+        alertVC.addTextField { (textField) in
             textField.placeholder = "Введите имя"
-        })
+        }
         
-        let submitAction = UIAlertAction(title: "OK", style: .default, handler: { (alertAction) in
+        let submitAction = UIAlertAction(title: "OK", style: .default) { (alertAction) in
             let textField = alertVC.textFields![0] as UITextField
             self.name = textField.text
-        })
+        }
         
         alertVC.addAction(submitAction)
         present(alertVC, animated: true)
@@ -326,10 +332,6 @@ class EngeniringCalculationViewController: UIViewController {
         let submitAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertVC.addAction(submitAction)
         present(alertVC, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
     }
     
 }
@@ -368,6 +370,10 @@ extension EngeniringCalculationViewController: UITableViewDataSource {
                 tableView.footerView(forSection: 0)?.textLabel?.text = layerCountString
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
     
 }

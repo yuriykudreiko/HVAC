@@ -45,8 +45,10 @@ class HeatEngeniringTableViewController: UITableViewController {
         let viewController = EngeniringCalculationViewController()
         viewController.delegate = self
         viewController.overwriteMainResult = false
-        let navVC = UINavigationController(rootViewController: viewController)
-        present(navVC, animated: true)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        
+        present(navigationController, animated: true)
     }
     
 }
