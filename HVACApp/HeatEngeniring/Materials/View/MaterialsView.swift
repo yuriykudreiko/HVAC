@@ -20,7 +20,8 @@ struct MaterialsView: View {
         NavigationView {
             ScrollViewReader { proxy in
                 makeList()
-                    .searchable(text: $viewModel.searchText, prompt: "Введите текст")
+                    .searchable(text: $viewModel.searchText, prompt: "Введите название материала")
+                    .autocorrectionDisabled(true)
                     .navigationTitle("Материалы")
                     .toolbar {
                         ToolbarItem(placement: .topBarLeading) {
@@ -55,6 +56,9 @@ struct MaterialsView: View {
                 dismiss()
             }
         }
+        .alert("Выберите наименование материала из списка", isPresented: $viewModel.shouldShowNoMaterialError) {
+            Button("OK", role: .cancel) { }
+        }
     }
     
     // MARK: - Views
@@ -81,7 +85,7 @@ struct MaterialsView: View {
         .scrollDismissesKeyboard(.immediately)
         .listStyle(.sidebar)
     }
-
+    
     func makeMaterialRow(material: MaterialModel) -> some View {
         HStack(alignment: .top) {
             Text("\(material.id)")
@@ -89,7 +93,7 @@ struct MaterialsView: View {
                 .multilineTextAlignment(.leading)
                 .frame(width: 27, alignment: .leading)
                 .foregroundStyle(.primary)
-
+            
             Text("\(material.name)")
                 .lineLimit(nil)
                 .font(.system(size: 16))
@@ -109,20 +113,27 @@ struct MaterialsView: View {
     }
     
     func makeMaterialWidthView() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            TextField("Введите толщину материала, δ мм", text: $viewModel.materialWidth)
-                .keyboardType(.numberPad)
-                .focused($isFocused)
-                .textFieldStyle(.roundedBorder)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 1)
-                        .stroke(viewModel.shouldShowError ? Color.red : Color.gray, lineWidth: 2)
-                )
-
+        VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 4) {
+                TextField("Введите толщину материала, δ мм", text: $viewModel.materialWidth)
+                    .keyboardType(.numberPad)
+                    .focused($isFocused)
+                    .textFieldStyle(.roundedBorder)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 1)
+                            .stroke(viewModel.shouldShowNoWidthError ? Color.red : Color.blue, lineWidth: 2)
+                    )
+                
+                Text("Введите толщину материала")
+                    .font(.system(size: 10))
+                    .foregroundStyle(Color.red)
+                    .opacity(viewModel.shouldShowNoWidthError ? 1 : 0)
+            }
+            
             Button {
                 viewModel.addButtonWasTapped()
             } label: {
-                Text("Добавить материал")
+                Text("Добавить выбранный материал")
             }
             .buttonStyle(GrowingButton())
         }

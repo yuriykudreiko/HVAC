@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ThermalConductivityModel: Decodable, Equatable {
+struct ThermalConductivityModel: Decodable, Equatable, Hashable {
     let a: Double
     let b: Double
 }

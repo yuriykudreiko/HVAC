@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MaterialModel: Decodable, Identifiable, Equatable {
+struct MaterialModel: Decodable, Identifiable, Equatable, Hashable {
     let id: String
     let name: String
     let density: Int

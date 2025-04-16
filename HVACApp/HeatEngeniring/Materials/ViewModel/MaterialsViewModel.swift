@@ -9,20 +9,24 @@
 import SwiftUI
 import Combine
 
-class MaterialsViewModel: ObservableObject {
+final class MaterialsViewModel: ObservableObject {
     
     var onMaterialSelect: ((_ material: MaterialModel, _ width: Double) -> Void)?
 
     // MARK: - Properties
 
     @Published var sections: [MaterialSectionModel] = []
+    @Published var initialSections: [MaterialSectionModel] = []
+
     @Published var selectedMaterial: MaterialModel?
 
     @Published var searchText: String = ""
     @Published var materialWidth: String = ""
     
     @Published var isScreenShown = true
-    @Published var shouldShowError = false
+    @Published var shouldShowNoWidthError = false
+    @Published var shouldShowNoMaterialError = false
+
     @Published var shouldScrollToSelectedMaterial = false
 
     @AppStorage("recentMaterials") private var recentMaterials: String = ""
@@ -39,6 +43,7 @@ class MaterialsViewModel: ObservableObject {
             let sections = try decoder.decode([MaterialSectionModel].self, from: materialsData)
 
             self.sections = sections
+            self.initialSections = sections
         } catch {
             print(error)
         }
@@ -48,16 +53,6 @@ class MaterialsViewModel: ObservableObject {
         _recentMaterials = AppStorage(wrappedValue: "value", "recentMaterials", store: userDefaults)
         
         bind()
-    }
-    
-    // MARK: - Bindings
-    
-    func bind() {
-        $materialWidth
-            .sink { [weak self] _ in
-                self?.shouldShowError = false
-            }
-            .store(in: &cancellableSet)
     }
 
     // MARK: - Actions
@@ -70,15 +65,17 @@ class MaterialsViewModel: ObservableObject {
             selectedMaterial = material
         }
         
-        shouldShowError = false
+        shouldShowNoWidthError = false
     }
     
     func addButtonWasTapped() {
-        guard
-            let selectedMaterial = selectedMaterial,
-            let width = Double(materialWidth)
-        else {
-            shouldShowError = true
+        guard let selectedMaterial = selectedMaterial else {
+            shouldShowNoMaterialError = true
+            return
+        }
+        
+        guard let width = Double(materialWidth) else {
+            shouldShowNoWidthError = true
             return
         }
         
@@ -90,4 +87,45 @@ class MaterialsViewModel: ObservableObject {
         isScreenShown = false
     }
     
+    // MARK: - Bindings
+    
+    func bind() {
+        $materialWidth
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                shouldShowNoWidthError = false
+            }
+            .store(in: &cancellableSet)
+        
+        $searchText
+            .sink { [weak self] text in
+                self?.updateSearchResults(for: text)
+            }
+            .store(in: &cancellableSet)
+    }
+    
+    // MARK: - Private
+    
+    func updateSearchResults(for searchText: String) {
+        guard !searchText.isEmpty else {
+            sections = initialSections
+            return
+        }
+        
+        sections = initialSections
+            .compactMap { section in
+                let filteredMaterials = section.materials
+                    .filter {
+                        SmartSearch.checkMatch(for: $0.name, with: searchText)
+                    }
+                
+                if filteredMaterials.isEmpty {
+                    return nil
+                } else {
+                    return MaterialSectionModel(id: section.id, name: section.name, materials: filteredMaterials)
+                }
+            }
+    }
+
 }
