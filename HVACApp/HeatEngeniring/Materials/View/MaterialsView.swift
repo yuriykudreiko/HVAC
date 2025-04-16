@@ -88,15 +88,18 @@ struct MaterialsView: View {
                 .font(.system(size: 16))
                 .multilineTextAlignment(.leading)
                 .frame(width: 27, alignment: .leading)
-            
+                .foregroundStyle(.primary)
+
             Text("\(material.name)")
                 .lineLimit(nil)
                 .font(.system(size: 16))
+                .foregroundStyle(.primary)
             
             Spacer()
             
             Text("\(material.density)")
                 .font(.system(size: 14))
+                .foregroundStyle(.secondary)
         }
         .foregroundStyle(viewModel.selectedMaterial?.id == material.id ? Color.blue : Color.black)
         .contentShape(Rectangle())
@@ -132,9 +135,15 @@ struct MaterialsView: View {
                 topTrailingRadius: 16,
                 style: .circular
             )
-            .fill(.white)
+            .fill(Color.white)
+            .edgesIgnoringSafeArea(.bottom)
+            .shadow(
+                color: Color.black.opacity(0.1),
+                radius: 12,
+                x: 0,
+                y: 4
+            )
         }
-        .background(ignoresSafeAreaEdges: .bottom)
     }
     
 }
