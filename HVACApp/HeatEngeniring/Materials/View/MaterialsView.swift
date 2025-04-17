@@ -20,7 +20,7 @@ struct MaterialsView: View {
         NavigationView {
             ScrollViewReader { proxy in
                 makeList()
-                    .searchable(text: $viewModel.searchText, prompt: "Введите название материала")
+                    .searchable(text: $viewModel.searchText, isPresented: $viewModel.isSearchStarted, prompt: "Введите название материала")
                     .autocorrectionDisabled(true)
                     .navigationTitle("Материалы")
                     .toolbar {

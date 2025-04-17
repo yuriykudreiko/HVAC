@@ -17,6 +17,7 @@ final class MaterialsViewModel: ObservableObject {
 
     @Published var sections: [MaterialSectionModel] = []
     @Published var initialSections: [MaterialSectionModel] = []
+    @Published var recentSection: MaterialSectionModel? // Store recent materials
 
     @Published var selectedMaterial: MaterialModel?
 
@@ -24,6 +25,7 @@ final class MaterialsViewModel: ObservableObject {
     @Published var materialWidth: String = ""
     
     @Published var isScreenShown = true
+    @Published var isSearchStarted = false
     @Published var shouldShowNoWidthError = false
     @Published var shouldShowNoMaterialError = false
 
@@ -42,17 +44,13 @@ final class MaterialsViewModel: ObservableObject {
             let decoder = JSONDecoder()
             let sections = try decoder.decode([MaterialSectionModel].self, from: materialsData)
 
-            self.sections = sections
             self.initialSections = sections
         } catch {
             print(error)
         }
         
-        let userDefaults = UserDefaults.standard
-        //        let defaultValue: [String: String] = [:]
-        _recentMaterials = AppStorage(wrappedValue: "value", "recentMaterials", store: userDefaults)
-        
         bind()
+        loadRecentMaterials()
     }
 
     // MARK: - Actions
@@ -79,11 +77,13 @@ final class MaterialsViewModel: ObservableObject {
             return
         }
         
+        addToRecentMaterials()
         onMaterialSelect?(selectedMaterial, width)
         isScreenShown = false
     }
     
     func close() {
+        addToRecentMaterials()
         isScreenShown = false
     }
     
@@ -103,6 +103,60 @@ final class MaterialsViewModel: ObservableObject {
                 self?.updateSearchResults(for: text)
             }
             .store(in: &cancellableSet)
+        
+        $isSearchStarted
+            .sink { [weak self] isStarted in
+                guard let self else { return }
+                
+                if isStarted {
+                    sections = initialSections
+                } else if let recentSection = recentSection {
+                    sections = [recentSection] + initialSections
+                } else {
+                    sections = initialSections
+                }
+            }
+            .store(in: &cancellableSet)
+    }
+    
+    // MARK: - Recent Materials
+    
+    func addToRecentMaterials() {
+        guard let material  = selectedMaterial else { return }
+        
+        var recentList = getRecentMaterials()
+
+        // Ensure uniqueness and limit to last 5 used
+        recentList.removeAll { $0.id == material.id }
+        recentList.insert(material, at: 0)
+        recentList = Array(recentList.prefix(5)) // Keep only the last 5 materials
+        
+        // Store recent materials in UserDefaults
+        if let encoded = try? JSONEncoder().encode(recentList.map { $0.id }) {
+            recentMaterials = String(data: encoded, encoding: .utf8) ?? ""
+        }
+    }
+    
+    func getRecentMaterials() -> [MaterialModel] {
+        guard let data = recentMaterials.data(using: .utf8),
+              let storedIds = try? JSONDecoder().decode([String].self, from: data) else {
+            return []
+        }
+
+        return initialSections
+            .flatMap { $0.materials }
+            .filter { storedIds.contains($0.id) }
+    }
+    
+    func loadRecentMaterials() {
+        let recentList = getRecentMaterials()
+        guard !recentList.isEmpty else {
+            return
+        }
+        
+        let recentSection = MaterialSectionModel(id: "0", name: "Недавно использованные", materials: recentList)
+        sections = [recentSection] + initialSections
+        self.recentSection = recentSection
     }
     
     // MARK: - Private
