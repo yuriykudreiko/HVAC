@@ -17,7 +17,7 @@ final class MaterialsViewModel: ObservableObject {
 
     @Published var sections: [MaterialSectionModel] = []
     @Published var initialSections: [MaterialSectionModel] = []
-    @Published var recentSection: MaterialSectionModel? // Store recent materials
+    @Published var recentSection: MaterialSectionModel?
 
     @Published var selectedMaterial: MaterialModel?
 
@@ -43,20 +43,26 @@ final class MaterialsViewModel: ObservableObject {
             let materialsData = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             let sections = try decoder.decode([MaterialSectionModel].self, from: materialsData)
-
-            self.initialSections = sections
+            
+            initialSections = sections
+            recentSection = loadRecentMaterials()
+            
+            // Initialize sections with recent materials if available
+            if let recentSection = recentSection {
+                self.sections = [recentSection] + sections
+            } else {
+                self.sections = sections
+            }
         } catch {
             print(error)
         }
         
         bind()
-        loadRecentMaterials()
     }
 
     // MARK: - Actions
     
     func select(material: MaterialModel) {
-        // FIXME: - add recent materials logic
         if selectedMaterial == material {
             selectedMaterial = nil
         } else {
@@ -93,7 +99,6 @@ final class MaterialsViewModel: ObservableObject {
         $materialWidth
             .sink { [weak self] _ in
                 guard let self else { return }
-                
                 shouldShowNoWidthError = false
             }
             .store(in: &cancellableSet)
@@ -103,26 +108,12 @@ final class MaterialsViewModel: ObservableObject {
                 self?.updateSearchResults(for: text)
             }
             .store(in: &cancellableSet)
-        
-        $isSearchStarted
-            .sink { [weak self] isStarted in
-                guard let self else { return }
-                
-                if isStarted {
-                    sections = initialSections
-                } else if let recentSection = recentSection {
-                    sections = [recentSection] + initialSections
-                } else {
-                    sections = initialSections
-                }
-            }
-            .store(in: &cancellableSet)
     }
     
     // MARK: - Recent Materials
     
     func addToRecentMaterials() {
-        guard let material  = selectedMaterial else { return }
+        guard let material = selectedMaterial else { return }
         
         var recentList = getRecentMaterials()
 
@@ -135,6 +126,9 @@ final class MaterialsViewModel: ObservableObject {
         if let encoded = try? JSONEncoder().encode(recentList.map { $0.id }) {
             recentMaterials = String(data: encoded, encoding: .utf8) ?? ""
         }
+        
+        // Update recent section
+        recentSection = MaterialSectionModel(id: "0", name: "Недавно использованные", materials: recentList)
     }
     
     func getRecentMaterials() -> [MaterialModel] {
@@ -148,25 +142,30 @@ final class MaterialsViewModel: ObservableObject {
             .filter { storedIds.contains($0.id) }
     }
     
-    func loadRecentMaterials() {
+    func loadRecentMaterials() -> MaterialSectionModel? {
         let recentList = getRecentMaterials()
         guard !recentList.isEmpty else {
-            return
+            return nil
         }
         
-        let recentSection = MaterialSectionModel(id: "0", name: "Недавно использованные", materials: recentList)
-        sections = [recentSection] + initialSections
-        self.recentSection = recentSection
+        return MaterialSectionModel(id: "0", name: "Недавно использованные", materials: recentList)
     }
     
     // MARK: - Private
     
     func updateSearchResults(for searchText: String) {
         guard !searchText.isEmpty else {
-            sections = initialSections
+            // Show all sections including recent materials when search is empty
+            if let recentSection = recentSection {
+                sections = [recentSection] + initialSections
+            } else {
+                sections = initialSections
+            }
+
             return
         }
         
+        // During search, show filtered results without recent section
         sections = initialSections
             .compactMap { section in
                 let filteredMaterials = section.materials
