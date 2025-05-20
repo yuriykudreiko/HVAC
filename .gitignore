@@ -31,6 +31,9 @@ playground.xcworkspace
 
 .build/
 
+# Breakpoints
+*.xcbkptlist
+*.xcuserstate
 
 # fastlane
 #
