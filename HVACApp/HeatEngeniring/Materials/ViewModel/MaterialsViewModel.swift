@@ -165,13 +165,28 @@ final class MaterialsViewModel: ObservableObject {
             return
         }
         
-        // During search, show filtered results without recent section
-        sections = initialSections
+        // During search, show filtered results including recent section if it has matches
+        var filteredSections: [MaterialSectionModel] = []
+        
+        // Filter recent section if it exists
+        if let recentSection = recentSection {
+            let filteredRecentMaterials = recentSection.materials
+                .filter { SmartSearch.checkMatch(for: $0.name, with: searchText) }
+            
+            if !filteredRecentMaterials.isEmpty {
+                filteredSections.append(MaterialSectionModel(
+                    id: recentSection.id,
+                    name: recentSection.name,
+                    materials: filteredRecentMaterials
+                ))
+            }
+        }
+        
+        // Filter other sections
+        let filteredInitialSections = initialSections
             .compactMap { section in
                 let filteredMaterials = section.materials
-                    .filter {
-                        SmartSearch.checkMatch(for: $0.name, with: searchText)
-                    }
+                    .filter { SmartSearch.checkMatch(for: $0.name, with: searchText) }
                 
                 if filteredMaterials.isEmpty {
                     return nil
@@ -179,6 +194,8 @@ final class MaterialsViewModel: ObservableObject {
                     return MaterialSectionModel(id: section.id, name: section.name, materials: filteredMaterials)
                 }
             }
+        
+        sections = filteredSections + filteredInitialSections
     }
 
 }
