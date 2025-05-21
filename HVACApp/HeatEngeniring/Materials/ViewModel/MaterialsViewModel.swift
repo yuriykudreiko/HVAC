@@ -183,7 +183,7 @@ final class MaterialsViewModel: ObservableObject {
         }
         
         // Filter other sections
-        let filteredInitialSections = initialSections
+        let filteredInitialSections: [MaterialSectionModel] = initialSections
             .compactMap { section in
                 let filteredMaterials = section.materials
                     .filter { SmartSearch.checkMatch(for: $0.name, with: searchText) }
