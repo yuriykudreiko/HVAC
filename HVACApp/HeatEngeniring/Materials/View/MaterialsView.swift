@@ -36,6 +36,7 @@ struct MaterialsView: View {
                         makeMaterialWidthView()
                     }
                     .animation(.default, value: viewModel.selectedMaterial)
+                    .animation(.default, value: viewModel.isSearchStarted)
                     .onChange(of: isFocused) {
                         Task {
                             try? await Task.sleep(nanoseconds: 300_000_000)
@@ -70,12 +71,16 @@ struct MaterialsView: View {
                     ForEach(sectionModel.materials) { material in
                         makeMaterialRow(material: material)
                             .id(material.id)
+                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
                 } header: {
                     Text(sectionModel.name)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.primary)
                         .multilineTextAlignment(.leading)
                         .lineLimit(nil)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
                         .onTapGesture {
                             isFocused = false
                         }
@@ -84,12 +89,13 @@ struct MaterialsView: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .listStyle(.sidebar)
+        .background(Color(.systemGroupedBackground))
     }
     
     func makeMaterialRow(material: MaterialModel) -> some View {
         HStack(alignment: .top) {
             Text("\(material.id)")
-                .font(.system(size: 16))
+                .font(.system(size: 16, weight: .medium))
                 .multilineTextAlignment(.leading)
                 .frame(width: 27, alignment: .leading)
                 .foregroundStyle(.primary)
@@ -106,28 +112,34 @@ struct MaterialsView: View {
                 .foregroundStyle(.secondary)
         }
         .foregroundStyle(viewModel.selectedMaterial?.id == material.id ? Color.blue : Color.black)
+        .padding(.vertical, 4)
         .contentShape(Rectangle())
         .onTapGesture {
-            viewModel.select(material: material)
+            withAnimation(.easeInOut(duration: 0.2)) {
+                viewModel.select(material: material)
+            }
         }
     }
     
     func makeMaterialWidthView() -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 8) {
             VStack(alignment: .leading, spacing: 4) {
                 TextField("Введите толщину материала, δ мм", text: $viewModel.materialWidth)
                     .keyboardType(.numberPad)
                     .focused($isFocused)
                     .textFieldStyle(.roundedBorder)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 1)
+                        RoundedRectangle(cornerRadius: 8)
                             .stroke(viewModel.shouldShowNoWidthError ? Color.red : Color.blue, lineWidth: 2)
                     )
+                    .padding(.horizontal, 4)
                 
-                Text("Введите толщину материала")
-                    .font(.system(size: 10))
-                    .foregroundStyle(Color.red)
-                    .opacity(viewModel.shouldShowNoWidthError ? 1 : 0)
+                if viewModel.shouldShowNoWidthError {
+                    Text("Введите толщину материала")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.red)
+                        .transition(.opacity)
+                }
             }
             
             Button {
