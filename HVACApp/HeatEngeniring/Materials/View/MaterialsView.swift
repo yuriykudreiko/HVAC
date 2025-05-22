@@ -75,7 +75,13 @@ struct MaterialsView: View {
                     ForEach(sectionModel.materials) { material in
                         makeMaterialRow(material: material)
                             .id(material.id)
-                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .listRowBackground(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(viewModel.selectedMaterial?.id == material.id ? 
+                                          Color.blue.opacity(0.1) : Color.clear)
+                                    .padding(.vertical, 4)
+                            )
                     }
                 } header: {
                     Text(sectionModel.name)
@@ -84,7 +90,7 @@ struct MaterialsView: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(nil)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 12)
                         .onTapGesture {
                             isFocused = false
                         }
@@ -92,31 +98,36 @@ struct MaterialsView: View {
             }
         }
         .scrollDismissesKeyboard(.immediately)
-        .listStyle(.sidebar)
+        .listStyle(.plain)
         .background(Color(.systemGroupedBackground))
     }
     
     func makeMaterialRow(material: MaterialModel) -> some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .center, spacing: 12) {
             Text("\(material.id)")
-                .font(.system(size: 16, weight: .medium))
-                .multilineTextAlignment(.leading)
-                .frame(width: 27, alignment: .leading)
-                .foregroundStyle(.primary)
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(.secondary)
+                .frame(width: 30, alignment: .leading)
             
-            Text("\(material.name)")
-                .lineLimit(nil)
-                .font(.system(size: 16))
-                .foregroundStyle(.primary)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(material.name)")
+                    .lineLimit(2)
+                    .font(.system(size: 16))
+                    .foregroundStyle(.primary)
+                
+                Text("Плотность: \(material.density) кг/м³")
+                    .font(.system(size: 13))
+                    .foregroundStyle(.secondary)
+            }
             
             Spacer()
             
-            Text("\(material.density)")
-                .font(.system(size: 14))
-                .foregroundStyle(.secondary)
+            if viewModel.selectedMaterial?.id == material.id {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.blue)
+                    .font(.system(size: 20))
+            }
         }
-        .foregroundStyle(viewModel.selectedMaterial?.id == material.id ? Color.blue : Color.black)
-        .padding(.vertical, 4)
         .contentShape(Rectangle())
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.2)) {
@@ -126,15 +137,19 @@ struct MaterialsView: View {
     }
     
     func makeMaterialWidthView() -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Толщина материала")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.secondary)
+                
                 TextField("Введите толщину материала, δ мм", text: $viewModel.materialWidth)
                     .keyboardType(.numberPad)
                     .focused($isFocused)
                     .textFieldStyle(.roundedBorder)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(viewModel.shouldShowNoWidthError ? Color.red : Color.blue, lineWidth: 2)
+                            .stroke(viewModel.shouldShowNoWidthError ? Color.red : Color.blue.opacity(0.3), lineWidth: 1)
                     )
                     .padding(.horizontal, 4)
                 
@@ -149,26 +164,30 @@ struct MaterialsView: View {
             Button {
                 viewModel.addButtonWasTapped()
             } label: {
-                Text("Добавить выбранный материал")
+                HStack {
+                    Text("Добавить материал")
+                    Image(systemName: "plus.circle.fill")
+                }
+                .frame(maxWidth: .infinity)
             }
             .buttonStyle(GrowingButton())
         }
-        .padding(16)
+        .padding(20)
         .background {
             UnevenRoundedRectangle(
-                topLeadingRadius: 16,
+                topLeadingRadius: 20,
                 bottomLeadingRadius: 0,
                 bottomTrailingRadius: 0,
-                topTrailingRadius: 16,
+                topTrailingRadius: 20,
                 style: .circular
             )
             .fill(Color.white)
             .edgesIgnoringSafeArea(.bottom)
             .shadow(
-                color: Color.black.opacity(0.1),
-                radius: 12,
+                color: Color.black.opacity(0.08),
+                radius: 16,
                 x: 0,
-                y: 4
+                y: -4
             )
         }
     }
