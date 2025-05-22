@@ -42,9 +42,9 @@ class HeatEngeniringTableViewController: UITableViewController {
     // MARK: - Actions
     
     @objc private func addButton(_ sender: UIBarButtonItem) {
-        let viewController = EngeniringCalculationViewController()
+        let viewModel = EngeniringCalculationViewModel(overwriteMainResult: false)
+        let viewController = EngeniringCalculationViewController(viewModel: viewModel)
         viewController.delegate = self
-        viewController.overwriteMainResult = false
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .overFullScreen
         
@@ -82,10 +82,9 @@ extension HeatEngeniringTableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         rememberingNumberOfRow = indexPath.row
         
-        let viewController = EngeniringCalculationViewController()
-        viewController.delegate = self
-        viewController.calculationResult = engeniringArray[indexPath.row]
-        viewController.overwriteMainResult = true
+        let calculationResult = engeniringArray[indexPath.row]
+        let viewModel = EngeniringCalculationViewModel(calculationResult: calculationResult, overwriteMainResult: true)
+        let viewController = EngeniringCalculationViewController(viewModel: viewModel)
         viewController.delegate = self
         let navigationController = UINavigationController(rootViewController: viewController)
         present(navigationController, animated: true)
